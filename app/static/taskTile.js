@@ -13,14 +13,13 @@ Vue.component('task-tile', {
     description: String
   },
   template: `
-  <div>
-    <p1> Hopes this shows up </p1>
-    <b-container fluid="lg" class="border">    
-      <b-row>
-        <b-col>Name is [[name]]</b-col>
-        <b-col>Description is [[description]]</b-col>
-      </b-row>  
-    </b-container>
-  </div>
+    <div class="row">    
+      <div class="column" style="width: 50%;">
+        <div>Name is [[name]]</div>
+      </div>  
+      <div class="column" style="width: 50%;">
+        <div>Description is [[description]]</div>
+      </div>  
+    </div>
   `
 })

@@ -4,7 +4,7 @@ from flask import Flask, render_template
 from flask import request, Blueprint
 from .sql_util import connect_sql
 from .sql_util import insertRow
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, ValidationError
 
 class TaskSchema(Schema):
     name=fields.Str()
@@ -59,12 +59,11 @@ def new_task():
   #Use schema to check for incorrect request entries
   try:
 
-      TaskSchema.load(data)
+      TaskSchema().load(data)
 
-  except ValidationError as err:
+  except ValidationError:
 
-      print(err.messages)
-      return 'err',400
+      return "json contained incorrect keys",400
 
 
   insertRow(mydb, "tasks", [data["name"], data["description"]])

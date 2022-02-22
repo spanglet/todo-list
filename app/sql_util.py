@@ -11,13 +11,13 @@ def connect_sql(sql_host,sql_db):
         database=sql_db
     )
 
-def insertRow (db,tableName, rowValues):
+def insertRow (db,tableName, vals):
 
     cursor = db.cursor()
 
     query = ("INSERT INTO " + tableName + "(name,description) "
             "VALUES (%s, %s)")
-    vals = ("TESTING", "TEST")
+    vals = tuple(vals)
 
     cursor.execute(query, vals)
     db.commit()

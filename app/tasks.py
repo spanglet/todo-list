@@ -4,6 +4,11 @@ from flask import Flask, render_template
 from flask import request, Blueprint
 from .sql_util import connect_sql
 from .sql_util import insertRow
+from marshmallow import Schema, fields
+
+class TaskSchema(Schema):
+    name=fields.Str()
+    description=fields.Str()
 
 app = Flask(__name__)
 
@@ -31,7 +36,7 @@ def get_tasks():
   cursor.close()
 
 
-  return render_template('tasks.html', data=json_data)
+  return render_template('tasks/tasks.html', data=json_data)
 
 
 
@@ -46,10 +51,23 @@ def new_task():
   if not data:
       return "Data must be of type json",400
 
+
   mydb = connect_sql(host, db)
 
   # Insert response data into MySQL DB
-  insertRow(mydb, "tasks", data)
+
+  #Use schema to check for incorrect request entries
+  try:
+
+      TaskSchema.load(data)
+
+  except ValidationError as err:
+
+      print(err.messages)
+      return 'err',400
+
+
+  insertRow(mydb, "tasks", [data["name"], data["description"]])
 
   return 'task successfully created',200
 

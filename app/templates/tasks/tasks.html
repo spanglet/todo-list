@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <!-- development version of Vue, includes helpful console warnings -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script type="text/javascript" src="/static/taskTile.js"></script>
+</head>
+
+<body>
+  <ul id='app'>
+    <li v-for="task in {{data}}" >
+      <task-tile :name="[[task.taskName]]" :description="[[task.description]]">
+      </task-tile>
+    </li>
+
+  </ul>
+
+</body>
+
+
+<script type="module">
+
+var name = "{{ data.name }}"
+var description = "{{ data.description }}"
+
+new Vue({
+  el: '#app',
+  data () {
+	  
+    return {
+      taskName: name,
+      description: description
+    }
+  }
+})
+
+</script>
+</body>
+
+
+</html>

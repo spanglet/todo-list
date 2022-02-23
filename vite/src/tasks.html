@@ -12,9 +12,6 @@
 
 <body>
   <div id='app'>
-    <div v-for="task in {{data}}" >
-      <task-tile id="task" :name="task.name" :description="task.description">
-      </task-tile>
       <App</App>
   </div>
 
@@ -23,7 +20,7 @@
 
 <script type="module">
 
-import App from './App'
+import App from './App.vue'
 
 var name = "{{ data.name }}"
 var description = "{{ data.description }}"

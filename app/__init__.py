@@ -1,10 +1,14 @@
 import os
-
 from flask import Flask
+from flask_cors import CORS
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
+    #enable CORS for communcation to separated front-end
+    CORS(app, resources={r'/*': {'origins': '*'}})
+
 
     # Debugging enabled for dev setting
     app.debug = True

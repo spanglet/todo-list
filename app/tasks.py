@@ -1,7 +1,7 @@
 import mysql.connector
 import json
 from flask import Flask, render_template
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
 from .sql_util import connect_sql
 from .sql_util import insertRow
 from marshmallow import Schema, fields, ValidationError
@@ -36,8 +36,7 @@ def get_tasks():
   cursor.close()
 
 
-  return render_template('tasks/tasks.html', data=json_data)
-
+  return jsonify(json_data)
 
 
 # Creates a new task into the database

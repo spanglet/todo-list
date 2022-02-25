@@ -1,9 +1,9 @@
 <template>
-  <div class="row">    
-    <div class="column" style="width: 50%;">
+  <div class="container">    
+    <div class="col">
       <div>Name is {{name}}</div>
     </div>  
-    <div class="column" style="width: 50%;">
+    <div class="col">
       <div>Description is {{description}}</div>
     </div>  
   </div>
@@ -13,8 +13,6 @@
   export default { 
     data() {
       return {
-        name: "",
-        taskName: "{{ }}"
       }
     },
     props: {
@@ -23,3 +21,27 @@
     }
   }
 </script>
+<style>
+
+  .container {
+    display: flex;
+    justify-content: center;
+    
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    gap: 10px;
+  }
+  .col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: tomato;
+    height: 50px;
+    width: 150px;
+    text-align: center;
+    border-radius: 25px;
+  }
+
+
+</style>

@@ -1,17 +1,23 @@
 <script>
 
   import TaskTile from './components/TaskTile.vue'
+  import ListHeader from './components/ListHeader.vue'
 
   
-  var url = "https://127.0.0.1:5000/tasks/list"
+  var url = "http://127.0.0.1:5000/tasks/list"
 
 
   export default { 
 
+    components: {
+      TaskTile,
+      ListHeader
+    },
     data() {
       return {
         name: "",
-        description: ""
+        description: "",
+        tasks: {}
       }
     },
     mounted() {
@@ -20,18 +26,20 @@
           'Access-Control-Allow-Origin': '*'
         }})
         .then((res) => {
-          this.task = res.data['name'].
-          this.description = res.data['description']
+          this.tasks = res.data
       })
+    },
+    methods: {
+      action() { alert("The Button Was Clicked.")}
     }
   }
-
 </script>
 
 <template>
   <div id='app'>
-    <div>
-      <TaskTile id="task" :name="task" :description="description">
+    <ListHeader></ListHeader>
+    <div v-for='task in tasks'>
+      <TaskTile :name="task.name" :description="task.description">
       </TaskTile>
     </div>
   </div>

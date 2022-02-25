@@ -6,6 +6,8 @@ RUN npm create vite@latest
 
 COPY . .
 
-EXPOSE 5002
+RUN npm install
+
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]

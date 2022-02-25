@@ -32,9 +32,7 @@ def get_tasks():
   for result in results:
     json_data.append(dict(zip(row_headers,result)))
 
-
   cursor.close()
-
 
   return jsonify(json_data)
 

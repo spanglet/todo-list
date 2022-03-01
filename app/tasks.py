@@ -3,11 +3,12 @@ import json
 from flask import Flask, render_template
 from flask import request, Blueprint, jsonify
 from .sql_util import connect_sql
-from .sql_util import insertRow
+from .sql_util import insertRow, updateRow, removeRow
 from marshmallow import Schema, fields, ValidationError
 
+# Schema for JSON post/put data validation
 class TaskSchema(Schema):
-    name=fields.Str()
+    name=fields.Str(required=True)
     description=fields.Str()
 
 app = Flask(__name__)
@@ -39,7 +40,7 @@ def get_tasks():
 
 # Creates a new task into the database
 #
-@bp.route('/new_task', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def new_task():
 
   # New task information is in request
@@ -55,7 +56,6 @@ def new_task():
 
   #Use schema to check for incorrect request entries
   try:
-
       TaskSchema().load(data)
 
   except ValidationError:
@@ -63,10 +63,28 @@ def new_task():
       return "json contained incorrect keys",400
 
 
-  insertRow(mydb, "tasks", [data["name"], data["description"]])
+  task_id = insertRow(mydb, "tasks", [data["name"], data["description"]])
 
-  return 'task successfully created',200
+  return "task successfully added",200
 
+
+@bp.route('/<task_id>', methods=['PUT','DELETE','GET'])
+def update_task(task_id):
+
+  data = request.get_json()
+  mydb = connect_sql(host, db)
+
+  # Update task with data of request if PUT request
+  if request.method == 'PUT':
+    updateRow(mydb, "tasks", data)
+    return "Task was successfully updated",200
+
+  # Remove task if DEL request received
+  if request.method == 'DELETE':
+    # todo: remove task from db
+    removeRow(mydb, "tasks", task_id)
+    return "Task was successfully removed",200
+    
 
 @bp.route('/initdb')
 def db_init():
@@ -86,7 +104,7 @@ def db_init():
     priority INTEGER,
     trueDueDate DATETIME,
     preferredDueDate DATETIME,
-    dependantsID INTEGER REFERENCES Tasks(taskID),
+    dependentsID INTEGER REFERENCES Tasks(taskID),
     startDate DATETIME,
     primary Key (taskID),
     foreign Key (categoryID) REFERENCES categories(categoryID)

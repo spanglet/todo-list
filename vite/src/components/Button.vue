@@ -1,6 +1,7 @@
 <template>
-  <button @click="action"></button>
-  <span class="icon"></span>
+  <button @click="action">
+    <font-awesome-icon class="icon" :icon="icon" />
+  </button>
 </template>
 
 <script>
@@ -11,18 +12,25 @@
     },
     props: {
       action: Function,
-      color: String,
+      content: String,
+      icon: String
     }
   }
 </script>
 
 <style>
   button {
-    color: v-bind(color);
+    display: flex;
+    border-radius: 9px;
+    align-items: center;
     
   }
+
   .icon {
-   content: '\002B' 
+    margin: 2px;
+    height: 100%;
+    width: 100%
   }
+
 </style>
 

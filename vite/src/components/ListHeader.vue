@@ -6,9 +6,9 @@
    <div class="col-header">
      Description
    </div>
-   <Button :color="blue" :action="showForm"></Button>     
-  <Form v-if="formVisible"> </Form>
+   <Button class="pos-button" :action="changeFormVisibility" :icon="buttonIcon" />
  </div>
+ <Form @submitted='changeFormVisibility' v-if="formVisible"> </Form>
 
 </template>
 
@@ -23,17 +23,24 @@
       Button,
       Form
     },
+    emits: ['viewChanged'],
     data() {
       return {
         name: "",
         description: "",
         tasks: {},
-        formVisible: false 
+        formVisible: false,
+        buttonIcon: "plus"
       }
     },
-    methods: {
-      showForm() {
-        this.formVisible = true
+    methods: { // triggered on successful form submission
+      // emits event up to main container for list refresh
+      changeFormVisibility() {
+        this.formVisible = !this.formVisible
+        this.$emit('viewChanged')
+
+        // Also change button icon
+        this.buttonIcon = (this.formVisible ? "minus" : "plus")
       }
     }
   }
@@ -47,17 +54,24 @@
  
     display: flex;
     list-style: none;
-    gap: 10px;
+    justify-content:center;
+    align-items: stretch;
+    height: 46px;
+    gap: 5px;
   }
   .col-header {
-
     display: flex;
-    justify-content: center;
-    background: tomato;
-    height: 50px;
-    width: 150px;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
+    width: 100%;
     text-align: center;
-    border-radius: 25px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+  }
+  .pos-button {
+    display: flex;
+    width: 10%;
+    background: hsl(var(--hue-green), 100%, var(--lgt-3));
   }
 
 </style>

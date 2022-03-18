@@ -25,7 +25,7 @@ services:
   ports:
   - 3000:3000
   build:
-   context: ./vite
+   context: ./frontend
 
 volumes:
   mysql:

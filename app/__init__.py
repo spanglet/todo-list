@@ -7,8 +7,8 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     #enable CORS for communcation to separated front-end
+    # Limit CORS to specific devices for production
     CORS(app, resources={r'/*': {'origins': '*'}})
-
 
     # Debugging enabled for dev setting
     app.debug = True
@@ -30,13 +30,14 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-
-    from . import auth,tasks
+    # Blueprints are registered to the app's root
+    from . import auth,tasks,lists
     app.register_blueprint(auth.bp)
     app.register_blueprint(tasks.bp)
+    app.register_blueprint(lists.bp)
 
+    # Initialize MySQL database
     from . import db
-    db.db_init()
-    
+    db.db_init(reinit=False)
 
     return app

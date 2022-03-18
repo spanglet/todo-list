@@ -2,14 +2,15 @@ import mysql.connector
 import json
 from flask import Flask, render_template
 from flask import request, Blueprint, jsonify
-from .sql_util import connect_sql
-from .sql_util import insertRow, updateRow, removeRow
+from .sql_util import insertRow, updateRow, removeRow, connect_sql
 from marshmallow import Schema, fields, ValidationError
 
 # Schema for JSON post/put data validation
 class TaskSchema(Schema):
     name=fields.Str(required=True)
     description=fields.Str()
+    trueDueDate=fields.Date()
+    listID=fields.Int()
 
 app = Flask(__name__)
 
@@ -19,53 +20,48 @@ db = "flax"
 bp = Blueprint('tasks', __name__, url_prefix='/tasks')
 
 
-@bp.route('/list')
-def get_tasks():
-  mydb = connect_sql(host, db)
-  cursor = mydb.cursor()
-
-  cursor.execute("SELECT * FROM tasks")
-
-  row_headers=[x[0] for x in cursor.description] #this will extract row headers
-
-  results = cursor.fetchall()
-  json_data=[]
-  for result in results:
-    json_data.append(dict(zip(row_headers,result)))
-
-  cursor.close()
-
-  return jsonify(json_data)
-
-
 # Creates a new task into the database
 #
-@bp.route('/', methods=['POST'])
-def new_task():
-
-  # New task information is in request
-  # Data must be of type json
-  data = request.get_json()
-  if not data:
-      return "Data must be of type json",400
-
+@bp.route('/', methods=['POST','GET'])
+def manage_tasks():
 
   mydb = connect_sql(host, db)
 
-  # Insert response data into MySQL DB
+  if request.method == 'POST':
 
-  #Use schema to check for incorrect request entries
-  try:
-      TaskSchema().load(data)
+    # Data must be of type json
+    data = request.get_json()
+    if not data:
+        return "Data must be of type json",400
+ 
+    # Use schema to check for incorrect request entries
+    try:
+        TaskSchema().load(data)
 
-  except ValidationError:
+    except ValidationError:
+        return "json contained incorrect keys",400
+ 
+    # Insert response data into MySQL DB
+    task_id = insertRow(mydb, "tasks", data)
+ 
+    return "task successfully added",200
 
-      return "json contained incorrect keys",400
+  # GET requests for entire contents of tasks in db
+  if request.method == 'GET':
 
-
-  task_id = insertRow(mydb, "tasks", [data["name"], data["description"]])
-
-  return "task successfully added",200
+    cursor = mydb.cursor()
+    cursor.execute("SELECT * FROM tasks")
+ 
+    row_headers=[x[0] for x in cursor.description] 
+ 
+    results = cursor.fetchall()
+    json_data=[]
+    for result in results:
+      json_data.append(dict(zip(row_headers,result)))
+ 
+    cursor.close()
+ 
+    return jsonify(json_data)
 
 
 @bp.route('/<task_id>', methods=['PUT','DELETE','GET'])
@@ -85,49 +81,3 @@ def update_task(task_id):
     removeRow(mydb, "tasks", task_id)
     return "Task was successfully removed",200
     
-
-@bp.route('/initdb')
-def db_init():
-  mydb = connect_sql(host, None)
-  cursor = mydb.cursor()
-
-  print("Creating Database")
-  cursor.execute("DROP DATABASE IF EXISTS flax")
-  cursor.execute("CREATE DATABASE flax")
-  cursor.close()
-
-  taskTable = '''
-    name VARCHAR(255), 
-    taskID INTEGER NOT NULL AUTO_INCREMENT,
-    description VARCHAR(255),
-    categoryID INTEGER,
-    priority INTEGER,
-    trueDueDate DATETIME,
-    preferredDueDate DATETIME,
-    dependentsID INTEGER REFERENCES Tasks(taskID),
-    startDate DATETIME,
-    primary Key (taskID),
-    foreign Key (categoryID) REFERENCES categories(categoryID)
-  '''
-
-  categoryTable = '''
-    name VARCHAR(255), 
-    categoryID INTEGER NOT NULL,
-    description VARCHAR(255),
-    primary Key (categoryID)
-  '''
-  mydb = connect_sql(host, db)
-  cursor = mydb.cursor()
-
-  # Drop Tables if previously created
-  cursor.execute("DROP TABLE IF EXISTS tasks")
-  cursor.execute("DROP TABLE IF EXISTS categories")
-
-  cursor.execute("CREATE TABLE categories ({})".format(categoryTable))
-  cursor.execute("CREATE TABLE tasks ({})".format(taskTable))
-  cursor.close()
-
-  return 'init database'
-
-if __name__ == "__main__":
-  app.run(debug=True,host ='0.0.0.0')

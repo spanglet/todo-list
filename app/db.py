@@ -1,14 +1,20 @@
 
-import mysql.connector
 from .sql_util import connect_sql
 
 host = "mysqldb"
 db = "flax"
 
-def db_init():
-  mydb = connect_sql(host, None)
-  cursor = mydb.cursor()
+def db_init(reinit=False):
 
+  mydb = connect_sql(host, None)
+  cursor = mydb.cursor(buffered=True)
+
+  # Skip db creation if database already exists
+  cursor.execute("SHOW DATABASES LIKE %s", [db])
+  if cursor.rowcount and not reinit:
+    return 'db already exists'
+
+  
   print("Creating Database")
   cursor.execute("DROP DATABASE IF EXISTS flax")
   cursor.execute("CREATE DATABASE flax")
@@ -23,9 +29,10 @@ def db_init():
     trueDueDate DATETIME,
     preferredDueDate DATETIME,
     dependantsID INTEGER REFERENCES Tasks(taskID),
-    startDate DATETIME,
+    listID INTEGER DEFAULT 1,
     primary Key (taskID),
-    foreign Key (categoryID) REFERENCES categories(categoryID)
+    foreign Key (categoryID) REFERENCES categories(categoryID),
+    foreign Key (listID) REFERENCES lists(id)
   '''
 
   categoryTable = '''
@@ -33,6 +40,13 @@ def db_init():
     categoryID INTEGER NOT NULL,
     description VARCHAR(255),
     primary Key (categoryID)
+  '''
+
+  listTable = '''
+    name VARCHAR(255), 
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    description VARCHAR(255),
+    primary Key (id)
   '''
 
   # Table to hold user authentication data
@@ -44,14 +58,10 @@ def db_init():
   mydb = connect_sql(host, db)
   cursor = mydb.cursor()
 
-  # Drop Tables if previously created
-  cursor.execute("DROP TABLE IF EXISTS tasks")
-  cursor.execute("DROP TABLE IF EXISTS categories")
-  cursor.execute("DROP TABLE IF EXISTS users")
-
+  cursor.execute("CREATE TABLE users ({})".format(userTable))
+  cursor.execute("CREATE TABLE lists ({})".format(listTable))
   cursor.execute("CREATE TABLE categories ({})".format(categoryTable))
   cursor.execute("CREATE TABLE tasks ({})".format(taskTable))
-  cursor.execute("CREATE TABLE users ({})".format(userTable))
   cursor.close()
 
   return 'init database'

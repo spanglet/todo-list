@@ -1,12 +1,13 @@
 import functools
 
 import mysql.connector
-from .sql_util import connect_sql
+from .sql_util import connect_sql,insertRow
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -36,6 +37,14 @@ def register():
                     "INSERT INTO users (username, password) VALUES (%s, %s)",
                     (username, generate_password_hash(password)),
                 )
+                    
+                # When user is successfully created, a main list is created for them
+                listData = {
+                    "name": "Main",
+                    "description": "Main task list"
+                }
+                insertRow(db, "lists", listData)
+        
                 db.commit()
             except mysql.connector.IntegrityError:
                 error = f"User {username} is already registered."
@@ -70,22 +79,27 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('index'))
+            return "log in successful",200
 
         flash(error)
 
     return render_template('auth/login.html')
 
-# 
+#Load user session if already logged in
 @bp.before_app_request
 def load_logged_in_user():
+
+    session.clear()
+
     user_id = session.get('user_id')
 
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
+        db = connect_sql(host, "flax")
+        cursor = db.cursor(dictionary=True)
+        g.user = cursor.execute(
+            'SELECT * FROM users WHERE id = %s', (user_id,)
         ).fetchone()
 
 

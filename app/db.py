@@ -22,24 +22,23 @@ def db_init(reinit=False):
 
   taskTable = '''
     name VARCHAR(255), 
-    taskID INTEGER NOT NULL AUTO_INCREMENT,
+    id INTEGER NOT NULL AUTO_INCREMENT,
     description VARCHAR(255),
     categoryID INTEGER,
     priority INTEGER,
     trueDueDate DATETIME,
     preferredDueDate DATETIME,
-    dependantsID INTEGER REFERENCES Tasks(taskID),
+    dependantsID INTEGER REFERENCES Tasks(id),
     listID INTEGER DEFAULT 1,
-    primary Key (taskID),
-    foreign Key (categoryID) REFERENCES categories(categoryID),
-    foreign Key (listID) REFERENCES lists(id)
+    primary Key (id),
+    foreign Key (categoryID) REFERENCES categories(id)
   '''
 
   categoryTable = '''
     name VARCHAR(255), 
-    categoryID INTEGER NOT NULL,
+    id INTEGER NOT NULL,
     description VARCHAR(255),
-    primary Key (categoryID)
+    primary Key (id)
   '''
 
   listTable = '''

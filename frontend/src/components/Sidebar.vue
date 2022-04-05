@@ -1,7 +1,7 @@
 <template>
 
   <div class="sidebar">
-    <SidebarTile @view-form="toggleForm"  @list-changed="changeList" text="Lists" :lists="lists" />
+    <SidebarTile @view-form="toggleForm"  @list-removed="removeList" @list-changed="changeList" text="Lists" :lists="lists" />
     <div v-if="showForm" class="list-form">
       <input type="text" placeholder="Name" v-model="name">
       <Button :btn-type="submitIcon" :action="createList" />
@@ -16,6 +16,8 @@
   import SidebarTile from "./SidebarTile.vue"
   import Button from "./Button.vue"
 
+  var url = "http://127.0.0.1:5000/lists/"
+
   export default {
     data() {
       return {
@@ -29,7 +31,11 @@
       SidebarTile,
       Button
     },
-    emits: ['listChanged','listsUpdated'],
+    emits: [
+      'listChanged',
+      'listsUpdated',
+      'notification'
+    ],
     methods: {
 
       // Toggles whether lists are shown in dropdown
@@ -40,13 +46,20 @@
       changeList: function (list) {
         this.$emit("listChanged", list)
       },
+      // Send delete request for list to backend
+      removeList: function (list) {
+        axios.delete(url + list.id
+          ).then((res) => {
+            if (res.status == 200) {
+              this.$emit("notification",list.name)
+            }
+          })
+      },
       toggleForm: function () {
         this.showForm = !this.showForm
       },
       // Creates a new list for user
       createList: function () {
-
-        var url = "http://127.0.0.1:5000/lists/"
 
         axios.post(url, {
             "name": this.name
@@ -76,7 +89,7 @@
     background: hsl(var(--hue-purple),100%,var(--lgt-3));
     color: white;
     flex-flow: column nowrap;
-    align-items: center;
+    align-items: stretch;
     margin: 8px;
     gap: 3px;
 

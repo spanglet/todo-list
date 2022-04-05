@@ -5,12 +5,19 @@
 
     <div class="sidebar-tile-header" @click="expand">
       {{ text }}
-      <Button class="form-btn" :btn-type="expandIcon" @click="this.$emit('viewForm')" />
+      <font-awesome-icon :icon="dropdownIcon" /> 
     </div>
 
-    <div class="expanded-content" v-if="expanded" v-for="list in lists">
-      <div @click="changeList(list.id)"> {{ list.name }}</div>
-    </div>
+    <TransitionGroup>
+      <div class="expanded-group" v-if="expanded">
+        <div class="expanded-item" v-for="list in lists" :key="list" @click="changeList(list.id)">
+            {{ list.name }}
+            <Button class="del-list-btn" btn-type="xmark" @click="this.$emit('listRemoved', list)" />
+        </div>
+        <Button class="new-list-btn" v-if="expanded" btn-type="plus" @click="this.$emit('viewForm')" />
+      </div>
+    </TransitionGroup>
+
   </div>
 
 </template>
@@ -27,11 +34,15 @@
     data() {
       return {
         expanded: false,
-        expandIcon: "plus",
       }
     },
     props: ["lists", "text"],
-    emits: ['viewForm','listChanged'],
+    emits: ['viewForm','listChanged', "listRemoved"],
+    computed: {
+      dropdownIcon() {
+        return this.expanded ? 'angle-up' : 'angle-down'
+      }
+    },
     methods: {
       // Expand or shrink when title is clicked
       expand: function () {
@@ -52,19 +63,52 @@
   .sidebar-tile {
     display: flex;
     flex-flow: column nowrap;
-    align-items: center;
+    align-items: stretch;
+    margin: 5px;
+    gap: 10px;
+    
+  }
+  .sidebar-tile > * {
   }
 
   .sidebar-tile-header {
     display: flex;
     font-size: 20pt;
     justify-content: space-between;
-    height: 50px;
-    gap: 60px;
-    margin: 10px;
+    height: 30px;
+    
   }
-  .expanded-content {
+  .sidebar-tile-header:hover {
+    background: hsl(var(--hue-purple),100%,var(--lgt-2));
+  }
+  .new-list-btn {
+    height: 30px;
+    width: 150px;
+  }
+  .expanded-group {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px;
+  }
+  .expanded-item {
+    display: flex;
+    justify-content: space-between;
+    height: 25px;
     font-size: 16pt;
+    text-align: left;
+    flex: 1;
+  }
+  .del-list-btn {
+    width: 25px;
+    background: red;
+  }
+  .v-enter-active,
+  .v-leave-active {
+    transition: all .5s ease;
+  }
+  .v-leave-to,
+  .v-enter-from {
+    opacity: 0;
   }
   .expanded-content:hover {
     background-color: grey;

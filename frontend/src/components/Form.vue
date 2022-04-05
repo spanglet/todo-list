@@ -66,10 +66,10 @@
     
   }
   .task-input {
-    width: 40%;
+    flex: 5;
   }
   #submitButton {
-    width: 20%;
+    flex: 1;
     background: hsl(var(--hue-green), 100%, var(--lgt-4))
   }
   .message {

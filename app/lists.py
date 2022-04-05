@@ -18,7 +18,7 @@ db = "flax"
 bp = Blueprint('lists', __name__, url_prefix='/lists')
 
 
-# Creates a new list of tasks
+# Creates a new task list
 @bp.route('/', methods=['POST','GET'])
 def new_list():
 
@@ -48,5 +48,21 @@ def new_list():
     data = getAllRows(mydb,"lists")
 
     return data,200
-        
 
+# Delete or modify individual list        
+@bp.route('/<list_id>', methods=['PUT','DELETE','GET'])
+def update_list(list_id):
+
+  data = request.get_json()
+  mydb = connect_sql(host, db)
+
+  # Update list with data of request if PUT request
+  if request.method == 'PUT':
+    updateRow(mydb, "lists", data)
+    return "List was successfully updated",200
+
+  # Remove list if DEL request received
+  if request.method == 'DELETE':
+    # todo: remove list from db
+    removeRow(mydb, "lists", list_id)
+    return "List was successfully removed",200

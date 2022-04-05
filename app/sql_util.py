@@ -63,13 +63,13 @@ def updateRow (db,tableName, json):
     db.commit()
     cursor.close()
 
-def removeRow (db, tableName, task_id):
+def removeRow (db, tableName, elem_id):
 
     cursor = db.cursor()
     query = ("DELETE FROM " + tableName +
-            " WHERE taskID = %s")
+            " WHERE id = %s")
 
-    cursor.execute(query, [task_id])
+    cursor.execute(query, [elem_id])
 
     db.commit()
     cursor.close()

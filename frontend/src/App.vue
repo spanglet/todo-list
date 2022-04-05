@@ -28,8 +28,13 @@
           tasks: [],
           drag: true
         },
+        notification: {
+          notify: false,
+          changedItem: ""
+        },
         currentList: 1,
-        lists: {}
+        lists: {},
+        currentTasks: []
       }
     },
     mounted() {
@@ -69,13 +74,28 @@
       },
       changeActiveList (listID) {
         this.currentList = listID
+        this.currentTasks = this.getActiveTasks()
+      },
+      removeList (list) {
+
+        this.getLists()
+
+        //notify user of action for 3 seconds
+        this.notification.notify = true
+        this.notification.changedItem = list
+        setTimeout(function() {
+          this.notification.notify = false
+        }, 3000)
+      },
+      getActiveTasks () {
+         return this.config.tasks.filter(task => task["listID"] == this.currentList)
       }
     },
     computed: {
 
-      activeListTasks () {
-        return this.config.tasks.filter(task => task["listID"] == this.currentList)
-      }
+    //  activeListTasks () {
+    //    return this.config.tasks.filter(task => task["listID"] == this.currentList)
+    //  }
     }
   }
 </script>
@@ -83,16 +103,27 @@
 <template>
   <div class='app'>
     <AppHeader class='header'></AppHeader>
-    <Sidebar @list-changed='changeActiveList' @lists-updated="getLists" :lists="lists" class='sidebar'></Sidebar>
+    <div class="notification header" v-show="notification.notify">
+      The list "{{list}}" has been removed
+    </div>
+    <Sidebar
+      @notification='removeList'
+      @list-changed='changeActiveList'
+      @lists-updated="getLists"
+      :lists="lists"
+      class='sidebar'
+    />
     <div class='list'>
       <ListHeader class="item" @view-changed='reloadList'></ListHeader>
 
       <draggable 
-        :list="activeListTasks" 
+        :list="currentTasks" 
         @start="config.drag=true" 
         @end="config.drag=false" 
         item-key="taskID"
-        class="list-group"> <template #item="{ element }">
+        ghost-class="ghost"
+        class="list-group">
+        <template #item="{ element }">
 
           <TaskTile class="list-group-item item"
               :name="element.name"
@@ -115,7 +146,7 @@
     display: grid;
     margin: 0;
     grid-template-columns: 2fr 12fr 1fr;
-    grid-template-rows: 2fr 10fr 1fr;
+    grid-template-rows: 3fr 17fr 1fr;
     grid-template-areas:
       "header header header"
       "sidebar main edge"
@@ -137,7 +168,13 @@
     background: #b3b6b7;
     margin: 0;
   }
-
+  .notification {
+    border-radius: 12px;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-5));
+    height: 50px;
+    width: 120px;
+    
+  }
   .list {
     display: flex;
     grid-area: main;
@@ -145,6 +182,15 @@
     align-items: flex-start;
     flex-flow: row wrap;
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+  }
+  .list-group {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 3px;
+  }
+  .ghost {
+    opacity: 0.5;
+    background: lightblue; 
   }
   .list > * {
     flex: 1 100%;

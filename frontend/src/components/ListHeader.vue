@@ -63,7 +63,7 @@
   .col-header {
     display: flex;
     background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
-    flex: 1;
+    flex: 5;
     text-align: center;
     border-radius: 8px;
     align-items: center;
@@ -73,7 +73,7 @@
   }
   .plus-button {
     display: flex;
-    width: 5%;
+    flex: 1;
     background: hsl(var(--hue-green), 100%, var(--lgt-3));
   }
 

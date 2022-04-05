@@ -63,15 +63,17 @@
     justify-content: center;
     margin: 0;
     list-style: none;
+    border-width: 2px;
     border-radius: 8px;
     background:  #bb8fce;
     gap: 5px;
     height: 40px;
   }
   .col {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1em;
-    margin: auto;
     font-size: 20px;
     flex: 1;
   }

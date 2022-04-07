@@ -1,5 +1,8 @@
 import { createApp } from 'vue'
+import * as VueRouter from 'vue-router'
 import App from './App.vue'
+import Wrapper from './App.vue'
+import Login from './Login.vue'
 import { library } from "@fortawesome/fontawesome-svg-core"
 
 // Icon imports from fontawesome
@@ -21,8 +24,21 @@ library.add(faAngleUp)
 
 const hostname = '0.0.0.0';
 
-app = createApp(App)
+// page routes to feed into Vue-Router
+const routes = [
+  { path: '/login', component: Login },
+  { path: '/', component: App }
+]
+
+//Vue Router options for url routing
+const router = VueRouter.createRouter({
+  history: VueRouter.createWebHistory(),
+  routes,
+})
+
+const app = createApp(Wrapper)
 	.component("font-awesome-icon", FontAwesomeIcon) //fontawesome
+	.use(router)
 	.mount('#app')
 
 // Temporarily required to makeinjections automatically unwrap computed refs

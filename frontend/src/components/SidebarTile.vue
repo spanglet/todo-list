@@ -9,8 +9,8 @@
     </div>
 
     <TransitionGroup>
-      <div class="expanded-group" v-if="expanded">
-        <div class="expanded-item" v-for="list in lists" :key="list" @click="changeList(list.id)">
+      <div class="sidebar-expanded-group" v-if="expanded">
+        <div class="sidebar-expanded-item" v-for="list in currentLists" :key="list" @click="changeList(list.id)">
             {{ list.name }}
             <Button class="del-list-btn" btn-type="xmark" @click="this.$emit('listRemoved', list)" />
         </div>
@@ -31,12 +31,14 @@
     components: {
       Button
     },
+    inject: ['currentLists'],
+    props: ["text"],
     data() {
       return {
         expanded: false,
+        lists: this.currentLists
       }
     },
-    props: ["lists", "text"],
     emits: ['viewForm','listChanged', "listRemoved"],
     computed: {
       dropdownIcon() {
@@ -76,7 +78,6 @@
     font-size: 20pt;
     justify-content: space-between;
     height: 30px;
-    
   }
   .sidebar-tile-header:hover {
     background: hsl(var(--hue-purple),100%,var(--lgt-2));
@@ -85,12 +86,12 @@
     height: 30px;
     width: 150px;
   }
-  .expanded-group {
+  .sidebar-expanded-group {
     display: flex;
     flex-flow: column nowrap;
     gap: 5px;
   }
-  .expanded-item {
+  .sidebar-expanded-item {
     display: flex;
     justify-content: space-between;
     height: 25px;

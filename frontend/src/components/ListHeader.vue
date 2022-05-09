@@ -1,12 +1,12 @@
 <template>
  <div>
- <div class="list-header">
-   <div class="col-header"> Name </div>
-   <div class="col-header"> Description </div>
-   <div class="col-header"> Due Date </div>
-   <Button class="plus-button" :btn-type="buttonIcon" :action="changeFormVisibility" />
- </div>
- <Form @submitted='changeFormVisibility' v-if="formVisible"> </Form>
+  <div class="list-header">
+    <div class="col-header"> Name </div>
+    <div class="col-header"> Description </div>
+    <div class="col-header"> Due Date </div>
+    <Button class="plus-button" :btn-type="buttonIcon" :action="changeFormVisibility" />
+  </div>
+  <Form @submitted='changeFormVisibility' v-if="formVisible"> </Form>
  </div>
 
 </template>
@@ -59,6 +59,7 @@
     height: 46px;
     color: white;
     border-bottom: 2px solid black;
+    font-size: 20px;
   }
   .col-header {
     display: flex;

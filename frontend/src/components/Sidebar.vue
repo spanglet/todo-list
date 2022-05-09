@@ -1,10 +1,25 @@
 <template>
+  <!-- Sidebar allows changes to the user's view of the list -->
 
   <div class="sidebar">
-    <SidebarTile @view-form="toggleForm"  @list-removed="removeList" @list-changed="changeList" text="Lists" :lists="lists" />
-    <div v-if="showForm" class="list-form">
-      <input type="text" placeholder="Name" v-model="name">
-      <Button :btn-type="submitIcon" :action="createList" />
+    <SidebarTile
+      text="Lists"
+      @view-form="toggleForm"
+      @list-removed="removeList"
+      @list-changed="changeList"
+    />
+    <div
+      v-if="showForm"
+      class="list-form">
+      <input
+        v-model="name"
+        type="text"
+        placeholder="Name"
+      >
+      <Button
+        :btn-type="submitIcon"
+        :action="createList"
+      />
     </div>
   </div>
 
@@ -19,14 +34,6 @@
   var url = "http://127.0.0.1:5000/lists/"
 
   export default {
-    data() {
-      return {
-        submitIcon: "check",
-        showForm: false,
-        name: "",
-      }
-    },
-    props: ["lists"],
     components: {
       SidebarTile,
       Button
@@ -36,6 +43,13 @@
       'listsUpdated',
       'notification'
     ],
+    data() {
+      return {
+        submitIcon: "check",
+        showForm: false,
+        name: "",
+      }
+    },
     methods: {
 
       // Toggles whether lists are shown in dropdown

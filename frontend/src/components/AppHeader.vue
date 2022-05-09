@@ -1,18 +1,43 @@
 <template>
 
-  <div class="container">
-    <div class="header-item"> To-Do List </div>
+  <div class="app-header">
+    <div class="header-item invisible" />
+    <div class="header-item header-title"> To-Do List </div>
+      <BaseDropdown 
+        header-text="My Account"
+        class="header-item header-menu"
+      />
   </div>
 
 </template>
 
-
 <script>
 
+  import BaseDropdown from "./BaseDropdown.vue"
+
   export default {
+    components: {
+      "BaseDropdown": BaseDropdown
+    },
     data() {
        return {
+        menuExpanded: false
        }
+    },
+    methods: {
+
+      expandAccountMenu () {
+        this.menuExpanded = !this.menuExpanded
+      },
+      logout () {
+        var url = this.HOST_URL + "users/logout/"
+        axios.get(url, this.REQ_CONFIG
+          ).then((res) => {
+            if (res.status == 200) {
+              this.$router.push('/login')
+            }
+          })
+      }
     }
   }
 
@@ -21,7 +46,7 @@
 
 <style>
 
-  .container {
+  .app-header {
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -31,13 +56,25 @@
     border: solid;
     border-width: 1px;
     border-color: darkgrey;
+    position: relative;
+  }
+  .app-header > * {
+    flex: 1;
+  }
+  .header-title {
+    font-size: 30px;
   }
 
-  .header-item {
-    text-align: center;
-    padding: 10px;
-    font-size: 29px;
-    
+  .header-menu {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .header-menu-item:hover {
+    background: lightgrey; 
+  }
+  .invisible {
+    visibility: hidden;
   }
 
 </style>

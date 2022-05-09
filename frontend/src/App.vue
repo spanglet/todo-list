@@ -7,11 +7,10 @@
   import draggable from 'vuedraggable/src/vuedraggable.js'
   import { computed } from 'vue'
 
-  var base_url = "http://127.0.0.1:5000/"
-  var task_url = base_url + "tasks/"
-  var list_url = base_url + "lists/"
-  // Headers for Cross-Origin access to Flask backend
-  var config = { headers: {'Access-Control-Allow-Origin': '*' } }
+  /* var base_url = "http://127.0.0.1:5000/" */
+  /* var task_url = base_url + "tasks/" */
+  /* var list_url = base_url + "lists/" // Headers for Cross-Origin access to Flask backend */
+  /* var config = { headers: {'Access-Control-Allow-Origin': '*' } } */
 
   export default { 
 
@@ -22,12 +21,16 @@
       Sidebar,
       draggable
     },
+    provide() {
+      return {
+        currentListID: computed(() => this.currentList),
+        currentLists:  computed(() => this.lists)
+      }
+    },
     data() {
       return {
-        config: {
-          tasks: [],
-          drag: true
-        },
+        tasks: [],
+        drag: true,
         notification: {
           notify: false,
           changedItem: ""
@@ -38,37 +41,35 @@
       }
     },
     mounted() {
-      this.reloadList()
-      this.getLists()
+      this.loadTasks()
+      this.loadLists()
     },
-    provide() {
-      return {
-        currentListID: computed(() => this.currentList)
-      }
+    beforeUnmount() {
+      this.saveTaskOrder()   
     },
     methods: {
 
-      reloadList() {
-        // GET request to Flask backend for list
-        axios.get(task_url, config
-	        ).then((res) => {
-            this.config.tasks = res.data
+      loadTasks() {
+        // Tasks fetched from Flask backend
+        axios.get("tasks/")
+          .then((res) => {
+            this.tasks = res.data
           })
       },
       deleteTask(task_id) {
         // DELETE request to remove task from db
-        var target = task_url + String(task_id)
-        axios.delete(target, config
-          ).then((res) => {
+        var targetPath = "tasks/" + String(task_id)
+        axios.delete(targetPath)
+          .then((res) => {
             if (res.status == 200) {
               this.reloadList()
             }
           })
       },
-      getLists() {
+      loadLists() {
         // GET request to Flask backend for list
-        axios.get(list_url, config
-	        ).then((res) => {
+        axios.get("lists/")
+          .then((res) => {
             this.lists = res.data
           })
       },
@@ -88,38 +89,41 @@
         }, 3000)
       },
       getActiveTasks () {
-         return this.config.tasks.filter(task => task["listID"] == this.currentList)
+         return this.tasks.filter(task => task["listID"] == this.currentList)
+      },
+      saveTaskOrder() {
+        axios.post("tasks/",{
+            this.
+          })
+          .then((res) => {
+          })
       }
-    },
-    computed: {
-
-    //  activeListTasks () {
-    //    return this.config.tasks.filter(task => task["listID"] == this.currentList)
-    //  }
     }
   }
 </script>
 
 <template>
   <div class='app'>
-    <AppHeader class='header'></AppHeader>
-    <div class="notification header" v-show="notification.notify">
-      The list "{{list}}" has been removed
+    <AppHeader class='header' />
+    <div
+      class="notification header"
+      v-show="notification.notify"
+    >
+      The list _____ has been removed
     </div>
     <Sidebar
       @notification='removeList'
       @list-changed='changeActiveList'
       @lists-updated="getLists"
-      :lists="lists"
       class='sidebar'
     />
     <div class='list'>
-      <ListHeader class="item" @view-changed='reloadList'></ListHeader>
+      <ListHeader class="item" @view-changed='loadTasks' />
 
       <draggable 
         :list="currentTasks" 
-        @start="config.drag=true" 
-        @end="config.drag=false" 
+        @start="drag=true" 
+        @end="drag=false" 
         item-key="taskID"
         ghost-class="ghost"
         class="list-group">

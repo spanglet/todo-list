@@ -40,7 +40,7 @@
       // User info sent to Flask backend for authentication
       authenticate() {
 
-        var url = this.HOST_URL + "users/login"
+        var url = "users/login"
         axios.post(url, {
             "username": this.username,
             "password": this.password

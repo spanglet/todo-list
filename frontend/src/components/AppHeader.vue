@@ -62,9 +62,10 @@
     flex: 1;
   }
   .header-title {
+    display: flex;
+    justify-content: center;
     font-size: 30px;
   }
-
   .header-menu {
     display: flex;
     justify-content: flex-end;

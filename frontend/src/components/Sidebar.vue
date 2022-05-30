@@ -31,13 +31,12 @@
   import SidebarTile from "./SidebarTile.vue"
   import Button from "./Button.vue"
 
-  var url = "http://127.0.0.1:5000/lists/"
-
   export default {
     components: {
       SidebarTile,
       Button
     },
+    inject: ["currentListID"],
     emits: [
       'listChanged',
       'listsUpdated',
@@ -62,8 +61,8 @@
       },
       // Send delete request for list to backend
       removeList: function (list) {
-        axios.delete(url + list.id
-          ).then((res) => {
+        axios.delete("lists/" + String(list.id))
+          .then((res) => {
             if (res.status == 200) {
               this.$emit("notification",list.name)
             }
@@ -75,20 +74,16 @@
       // Creates a new list for user
       createList: function () {
 
-        axios.post(url, {
+        axios.post("lists/", {
             "name": this.name
-          },  {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        }).then((res) => { 
-          // Emit to parent container so list is updated
-          if (res.status == 200) {
-            this.$emit("listsUpdated")
-            this.showForm = !this.showForm
-          }
-        })
+          })
+          .then((res) => { 
+            // Emit to parent container so list is updated
+            if (res.status == 200) {
+              this.$emit("listsUpdated")
+              this.showForm = !this.showForm
+            }
+          })
       }
     }      
   }

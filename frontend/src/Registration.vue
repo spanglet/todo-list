@@ -57,8 +57,7 @@
           alert("Username must be at least 4 characters")
         } 
         else {
-          var url = this.HOST_URL + "users/"
-          axios.post(url, {
+          axios.post("users/", {
               "username": this.username,
               "password": this.password
             }, config).then((res) => { 
@@ -102,7 +101,6 @@
   }
   .input-row {
     display: flex;
-    flex: row wrap;
   }
 
 </style>

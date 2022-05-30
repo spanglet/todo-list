@@ -1,25 +1,16 @@
 <script>
 
-  import TaskTile from './components/TaskTile.vue'
-  import ListHeader from './components/ListHeader.vue'
+  import TaskList from './components/TaskList.vue'
   import AppHeader from './components/AppHeader.vue'
   import Sidebar from './components/Sidebar.vue'
-  import draggable from 'vuedraggable/src/vuedraggable.js'
   import { computed } from 'vue'
-
-  /* var base_url = "http://127.0.0.1:5000/" */
-  /* var task_url = base_url + "tasks/" */
-  /* var list_url = base_url + "lists/" // Headers for Cross-Origin access to Flask backend */
-  /* var config = { headers: {'Access-Control-Allow-Origin': '*' } } */
 
   export default { 
 
     components: {
-      TaskTile,
-      ListHeader,
       AppHeader,
       Sidebar,
-      draggable
+      TaskList
     },
     provide() {
       return {
@@ -35,17 +26,14 @@
           notify: false,
           changedItem: ""
         },
-        currentList: 1,
-        lists: {},
-        currentTasks: []
+        currentList: 0,
+        lists: {}
       }
     },
     mounted() {
-      this.loadTasks()
       this.loadLists()
-    },
-    beforeUnmount() {
-      this.saveTaskOrder()   
+      this.loadTasks()
+      this.changeActiveList(1)
     },
     methods: {
 
@@ -75,28 +63,32 @@
       },
       changeActiveList (listID) {
         this.currentList = listID
-        this.currentTasks = this.getActiveTasks()
       },
       removeList (list) {
 
-        this.getLists()
+        this.loadLists()
 
         //notify user of action for 3 seconds
         this.notification.notify = true
         this.notification.changedItem = list
-        setTimeout(function() {
-          this.notification.notify = false
+        setTimeout(function() { console.log("Timout completed")
         }, 3000)
+        this.notification.notify = false
       },
       getActiveTasks () {
          return this.tasks.filter(task => task["listID"] == this.currentList)
       },
       saveTaskOrder() {
-        axios.post("tasks/",{
-            this.
+        taskOrder = this.currentTasks.map(({taskID}) => taskID)
+        axios.put("tasks/",{
+            'task_order': taskOrder
           })
-          .then((res) => {
-          })
+      }
+    },
+    computed: {
+  
+      currentTasks() {
+        return this.tasks.filter(task => task["listID"] == this.currentList)
       }
     }
   }
@@ -114,31 +106,11 @@
     <Sidebar
       @notification='removeList'
       @list-changed='changeActiveList'
-      @lists-updated="getLists"
+      @lists-updated="loadLists"
       class='sidebar'
     />
     <div class='list'>
-      <ListHeader class="item" @view-changed='loadTasks' />
-
-      <draggable 
-        :list="currentTasks" 
-        @start="drag=true" 
-        @end="drag=false" 
-        item-key="taskID"
-        ghost-class="ghost"
-        class="list-group">
-        <template #item="{ element }">
-
-          <TaskTile class="list-group-item item"
-              :name="element.name"
-              :description="element.description"
-              :dueDate="element.trueDueDate"
-              @remove-item='deleteTask(element.taskID)'>
-          </TaskTile>
-
-        </template>
-      </draggable>
-
+      <TaskList />
     </div>
     <div class="footer"></div>
   </div>
@@ -163,6 +135,13 @@
     grid-area: header;
     margin: 0; 
   }
+  .list {
+    display: flex;
+    grid-area: main;
+    align-content: stretch;
+    flex-flow: column nowrap;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+  }
   .sidebar {
     margin: 0;
     grid-area: sidebar;
@@ -179,29 +158,9 @@
     width: 120px;
     
   }
-  .list {
-    display: flex;
-    grid-area: main;
-    align-content: flex-start;
-    align-items: flex-start;
-    flex-flow: row wrap;
-    background: hsl(var(--hue-purple), 100%, var(--lgt-6));
-  }
-  .list-group {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 3px;
-  }
-  .ghost {
-    opacity: 0.5;
-    background: lightblue; 
-  }
   .list > * {
     flex: 1 100%;
     padding: 5px;
-  }
-  .item  {
-    flex-grow: 1;
   }
 </style>
 

@@ -9,7 +9,7 @@
     <div class="col">
       <div>{{formattedDueDate}}</div>
     </div>  
-    <Button class="del-button" :action="removeItem"  btn-type="xmark" />
+    <Button class="tile-del-button" :action="removeItem"  btn-type="xmark" />
   </div>
 </template>
 
@@ -34,7 +34,7 @@
     props: {
       name: String,
       description: String,
-      dueDate: Date
+      dueDate: String
     },
     methods: {
       // Emit delete event to App parent container
@@ -63,7 +63,7 @@
     justify-content: center;
     margin: 0;
     list-style: none;
-    border-width: 2px;
+    border: 2px darkgrey;
     border-radius: 8px;
     background:  #bb8fce;
     gap: 5px;
@@ -77,7 +77,7 @@
     font-size: 20px;
     flex: 1;
   }
-  .del-button {
+  .tile-del-button {
     margin: 2px; 
     background: darksalmon;
     width: 5%;

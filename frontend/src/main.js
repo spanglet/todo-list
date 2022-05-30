@@ -1,9 +1,7 @@
 import { createApp } from 'vue'
-import * as VueRouter from 'vue-router'
-import App from './App.vue'
+
+import { router } from './router.js'
 import Wrapper from './Wrapper.vue'
-import Login from './Login.vue'
-import Registration from './Registration.vue'
 
 // Icon imports
 import { library } from "@fortawesome/fontawesome-svg-core"
@@ -23,11 +21,10 @@ const app = createApp(Wrapper)
 
 app.mount('#app')
 
-//axios global config
+axios.defaults.baseURL = 'http://127.0.0.1:5000/';
+axios.defaults.headers.post['Content-Type'] = "application/json"
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://127.0.0.1:5000/'
 axios.defaults.withCredentials = true
-axios.defaults.baseURL = "http://127.0.0.1:5000/"
-axios.defaults.headers.common = {'Access-Control-Allow-Origin': '*'}
-axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 // Temporarily required to makeinjections automatically unwrap computed refs
 // Will be unnecessary by Vue 3.3

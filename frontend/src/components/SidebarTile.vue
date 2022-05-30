@@ -10,11 +10,29 @@
 
     <TransitionGroup>
       <div class="sidebar-expanded-group" v-if="expanded">
-        <div class="sidebar-expanded-item" v-for="list in currentLists" :key="list" @click="changeList(list.id)">
+        <div 
+          class="sidebar-expanded-item"
+          v-for="list in currentLists"
+          :key="list.id"
+          :class="{ 'active-list': isActiveList(list.id) }"
+          @click="changeList(list.id)">
+
             {{ list.name }}
-            <Button class="del-list-btn" btn-type="xmark" @click="this.$emit('listRemoved', list)" />
+
+            <Button
+              class="del-list-btn"
+              btn-type="xmark"
+              @click="this.$emit('listRemoved', list)"
+            />
+
         </div>
-        <Button class="new-list-btn" v-if="expanded" btn-type="plus" @click="this.$emit('viewForm')" />
+
+        <Button
+          class="new-list-btn"
+          v-if="expanded"
+          btn-type="plus"
+          @click="this.$emit('viewForm')"
+        />
       </div>
     </TransitionGroup>
 
@@ -31,7 +49,7 @@
     components: {
       Button
     },
-    inject: ['currentLists'],
+    inject: ['currentLists','currentListID'],
     props: ["text"],
     data() {
       return {
@@ -53,6 +71,9 @@
       // Emit the list change to the root (App) component for handling
       changeList: function(list) {
         this.$emit('listChanged', list)
+      },
+      isActiveList: function(listID) {
+        return (this.currentListID == listID)
       }
     }
   }
@@ -114,7 +135,9 @@
   .expanded-content:hover {
     background-color: grey;
   }
-  
+  .active-list {
+    background-color: hsl(var(--hue-purple),100%,var(--lgt-2));
+  }
 
 </style>
 

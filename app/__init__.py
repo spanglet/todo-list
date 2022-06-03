@@ -1,40 +1,30 @@
 import os
 from flask import Flask
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from .db_models import db
 
+REINIT_DB = True
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
-    #enable CORS for communcation to separated front-end
-    # Limit CORS to specific devices for production
-    CORS(app, resources={r'/*': {'origins': ''}})
+    # Enable CORS for frontend cross-origin requests
+    CORS(app, resources={r'/*': {'origins': '127.0.0.1:300'}})
 
-    # Debugging enabled for dev setting
-    #app.debug = True
+    # Config loaded from config.py
+    # TODO make env vars switch between testing and dev configs
+    app.config.from_object('config.Config')
 
     try:
-        db = SQLAlchemy(app)
-
-    
+        db.init_app(app)
+        if REINIT_DB:
+            db.drop_all()
+            db.create_all() 
     except Exception as e: 
-        print("Exception when trying to connect to the MySQL database\n")
+        print("Exception when initializing database\n")
         print(e.message)
-
-    
-
-    #app.config.from_mapping(
-    #    SECRET_KEY='dev'
-    #)
-
-    """if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)"""
+        return
 
     # ensure the instance folder exists
     try:
@@ -47,9 +37,5 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.register_blueprint(tasks.bp)
     app.register_blueprint(lists.bp)
-
-    # Initialize MySQL database
-    from . import db
-    db.db_init(reinit=False)
 
     return app

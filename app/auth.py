@@ -6,7 +6,8 @@ from flask import (
 from werkzeug.security import check_password_hash, generate_password_hash
 from uuid import uuid4
 
-from .sql_util import connect_sql,insertRow
+from .db_models import db, User, List
+#from .sql_util import connect_sql,insertRow
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -17,13 +18,10 @@ host = "mysqldb"
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
+        
         username = request.form['username']
         password = request.form['password']
         
-        # Connect to docker container running mysql db
-        db = connect_sql(host, "flax")
-        cursor = db.cursor()
-
         # Password and Username are both required fields
         error = None
         if not username:
@@ -33,30 +31,32 @@ def register():
 
         if error is None:
             try:
-                userData = {
-                    "userID": uuid4().bytes,
-                    "username": username,
-                    "password": generate_password_hash(password)
-                }
-                cursor.execute(
-                    "INSERT INTO users (username, password) VALUES (%s, %s)",
-                    (username, generate_password_hash(password)),
-                )
+                user_id = uuid4().bytes,
+
+                # Create user via MySQL-Alchemy models
+                new_user = User(
+                        id = user_id
+                        username = username,
+                        password = generate_password_hash(password))
+                db.session.add(new_user)
+                db.session.commit()
                     
                 # When user is successfully created, a main list is created for them
-                listData = {
-                    "name": "Main",
-                    "description": "Main task list"
-                }
-                insertRow(db, "lists", listData)
-        
-                db.commit()
-            except mysql.connector.IntegrityError:
-                error = f"User {username} is already registered."
-            else:
-                return redirect(url_for("auth.login"))
+                main_list = List(
+                    name = "Main",
+                    description =  "Main list",
+                    userID = user_id)
+                db.session.add(main_list)
+                db.session.commit()
 
-        flash(error)
+            except IntegrityError:
+                return "Username already exists",200
+        
+            except SQLError as e:
+                print ("SQL error when adding user:\n")
+                print(e)
+            else:
+                return "User was successfully registered",200
 
     return render_template('auth/register.html')
 

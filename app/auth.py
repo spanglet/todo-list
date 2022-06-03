@@ -1,12 +1,12 @@
 import functools
-
 import mysql.connector
-from .sql_util import connect_sql,insertRow
-
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+from uuid import uuid4
+
+from .sql_util import connect_sql,insertRow
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -33,6 +33,11 @@ def register():
 
         if error is None:
             try:
+                userData = {
+                    "userID": uuid4().bytes,
+                    "username": username,
+                    "password": generate_password_hash(password)
+                }
                 cursor.execute(
                     "INSERT INTO users (username, password) VALUES (%s, %s)",
                     (username, generate_password_hash(password)),

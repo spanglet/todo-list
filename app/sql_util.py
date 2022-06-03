@@ -1,6 +1,9 @@
 from flask import jsonify
 import mysql.connector
 
+
+
+
 # Connect to SQL database via MySQL-Python connector
 def connect_sql(sql_host,sql_db):
     return mysql.connector.connect(

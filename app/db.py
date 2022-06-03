@@ -6,6 +6,8 @@ db = "flax"
 
 def db_init(reinit=False):
 
+
+
   mydb = connect_sql(host, None)
   cursor = mydb.cursor(buffered=True)
 

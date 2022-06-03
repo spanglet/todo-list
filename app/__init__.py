@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -8,21 +10,31 @@ def create_app(test_config=None):
 
     #enable CORS for communcation to separated front-end
     # Limit CORS to specific devices for production
-    CORS(app, resources={r'/*': {'origins': '*'}})
+    CORS(app, resources={r'/*': {'origins': ''}})
 
     # Debugging enabled for dev setting
-    app.debug = True
+    #app.debug = True
 
-    app.config.from_mapping(
-        SECRET_KEY='dev'
-    )
+    try:
+        db = SQLAlchemy(app)
 
-    if test_config is None:
+    
+    except Exception as e: 
+        print("Exception when trying to connect to the MySQL database\n")
+        print(e.message)
+
+    
+
+    #app.config.from_mapping(
+    #    SECRET_KEY='dev'
+    #)
+
+    """if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
     else:
         # load the test config if passed in
-        app.config.from_mapping(test_config)
+        app.config.from_mapping(test_config)"""
 
     # ensure the instance folder exists
     try:

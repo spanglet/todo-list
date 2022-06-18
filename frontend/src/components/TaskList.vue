@@ -32,7 +32,7 @@
 
       loadTasks() {
         // Tasks fetched from Flask backend
-        axios.get("tasks/")
+        this.axios.get("tasks/")
           .then((res) => {
             if (res.status == 200) {
               this.tasks = res.data
@@ -47,7 +47,7 @@
        */
       deleteTask(task_id, index) {
         var targetPath = "tasks/" + task_id
-        axios.delete(targetPath)
+        this.axios.delete(targetPath)
           .then((res) => {
             if (res.status == 200) {
               this.loadTasks()
@@ -55,8 +55,8 @@
           })
       },
       saveTaskOrder() {
-        taskOrder = this.currentTasks.map(({taskID}) => taskID)
-        axios.put("tasks/",{
+        taskOrder = this.visibleTasks.map(({taskID}) => taskID)
+        this.axios.put("tasks/",{
             'task_order': taskOrder
           })
       }
@@ -73,7 +73,7 @@
   <div class='task-list'>
     <ListHeader class="item" @view-changed='loadTasks' />
     <draggable 
-      :list="currentTasks" 
+      :list="visibleTasks" 
       @start="drag=true" 
       @end="drag=false" 
       item-key="id"

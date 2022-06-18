@@ -20,15 +20,6 @@
 
 <script>
 
-
-  var config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Credentials': "true",
-        'Access-Control-Allow-Origin': 'http://127.0.0.1:5000'
-      }
-    }
-  
   export default {
     data() {
        return {
@@ -40,13 +31,13 @@
       // User info sent to Flask backend for authentication
       authenticate() {
 
-        var url = "users/login"
-        axios.post(url, {
+        this.axios.post("auth/login", {
             "username": this.username,
             "password": this.password
-          }, config).then((res) => { 
+          })
+          .then((res) => { 
             // Render application if login is successful
-            if (res.data['loginSuccess']) {
+            if (res.data['OK']) {
               this.$router.push("/app")
             }
             else {
@@ -56,9 +47,7 @@
       }
     }
   }
-
 </script>
-
 
 <style>
 

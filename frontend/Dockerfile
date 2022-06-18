@@ -2,11 +2,14 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
+COPY package*.json ./
+
 RUN npm create vite@latest
 
-COPY . .
 
 RUN npm install
+
+COPY . .
 
 EXPOSE 3000
 

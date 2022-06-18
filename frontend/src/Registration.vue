@@ -27,14 +27,6 @@
 
 <script>
 
-
-  var config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    }
-  
   export default {
     data() {
       return {
@@ -57,10 +49,11 @@
           alert("Username must be at least 4 characters")
         } 
         else {
-          axios.post("users/", {
+          this.axios.post("auth/register", {
               "username": this.username,
               "password": this.password
-            }, config).then((res) => { 
+            })
+            .then((res) => { 
               // Render application if login is successful
               if (res.status == 200) {
                 this.$router.push("/login")

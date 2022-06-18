@@ -12,9 +12,6 @@
 
 <script>
 
-  var config = { headers: {'Access-Control-Allow-Origin': '*' } }
-
-  var url = "http://127.0.0.1:5000/users/active"
 
   export default {
     data() {
@@ -25,9 +22,9 @@
     created () {
       // Check if a user is active in the backend session
       // Routes to login page if no active user returned
-      axios.get(url, config
-	      ).then((res) => {
-          if (res.status == 200 && res.data["user"]) {
+      this.axios.get("auth/login")
+	.then((res) => {
+          if (res.data["activeSession"]) {
             this.$router.push('/app')
           }
           else {

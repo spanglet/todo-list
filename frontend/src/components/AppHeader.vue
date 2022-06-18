@@ -31,7 +31,7 @@
       },
       logout () {
         var url = this.HOST_URL + "users/logout/"
-        axios.get(url, this.REQ_CONFIG
+        this.axios.get(url, this.REQ_CONFIG
           ).then((res) => {
             if (res.status == 200) {
               this.$router.push('/login')

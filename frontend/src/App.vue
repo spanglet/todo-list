@@ -39,7 +39,7 @@
 
       loadTasks() {
         // Tasks fetched from Flask backend
-        axios.get("tasks/")
+        this.axios.get("tasks/")
           .then((res) => {
             this.tasks = res.data
           })
@@ -47,7 +47,7 @@
       deleteTask(task_id) {
         // DELETE request to remove task from db
         var targetPath = "tasks/" + String(task_id)
-        axios.delete(targetPath)
+        this.axios.delete(targetPath)
           .then((res) => {
             if (res.status == 200) {
               this.reloadList()
@@ -56,7 +56,7 @@
       },
       loadLists() {
         // GET request to Flask backend for list
-        axios.get("lists/")
+        this.axios.get("lists/")
           .then((res) => {
             this.lists = res.data
           })
@@ -80,7 +80,7 @@
       },
       saveTaskOrder() {
         taskOrder = this.currentTasks.map(({taskID}) => taskID)
-        axios.put("tasks/",{
+        this.axios.put("tasks/",{
             'task_order': taskOrder
           })
       }

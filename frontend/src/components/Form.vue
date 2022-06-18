@@ -29,20 +29,14 @@
     methods: {
       submitForm() {
 
-        var url = "http://127.0.0.1:5000/tasks/"
-         
         // New task request is sent to Flask backend
-        axios.post(url, {
+        this.axios.post("tasks/", {
             "name": this.name,
             "description": this.description,
             "trueDueDate": this.dueDate,
-            "listID": this.listID
-          },  {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        }).then((res) => { 
+            "listID": this.currentListID
+          })
+          .then((res) => { 
           // Emit to parent container so list is updated
           if (res.status == 200) {
             this.$emit('submitted', true)

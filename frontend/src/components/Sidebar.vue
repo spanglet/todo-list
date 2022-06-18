@@ -61,7 +61,7 @@
       },
       // Send delete request for list to backend
       removeList: function (list) {
-        axios.delete("lists/" + String(list.id))
+        this.axios.delete("lists/" + String(list.id))
           .then((res) => {
             if (res.status == 200) {
               this.$emit("notification",list.name)
@@ -74,7 +74,7 @@
       // Creates a new list for user
       createList: function () {
 
-        axios.post("lists/", {
+        this.axios.post("lists/", {
             "name": this.name
           })
           .then((res) => { 

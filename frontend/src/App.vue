@@ -15,7 +15,8 @@
     provide() {
       return {
         currentListID: computed(() => this.currentList),
-        currentLists:  computed(() => this.lists)
+        currentLists: computed(() => this.lists),
+        currentTasks: computed(() => this.currentTasks)  
       }
     },
     data() {
@@ -26,14 +27,13 @@
           notify: false,
           changedItem: ""
         },
-        currentList: 0,
+        currentList: 1,
         lists: {}
       }
     },
     mounted() {
       this.loadLists()
       this.loadTasks()
-      this.changeActiveList(1)
     },
     methods: {
 
@@ -75,9 +75,6 @@
         }, 3000)
         this.notification.notify = false
       },
-      getActiveTasks () {
-         return this.tasks.filter(task => task["listID"] == this.currentList)
-      },
       saveTaskOrder() {
         taskOrder = this.currentTasks.map(({taskID}) => taskID)
         this.axios.put("tasks/",{
@@ -86,7 +83,6 @@
       }
     },
     computed: {
-  
       currentTasks() {
         return this.tasks.filter(task => task["listID"] == this.currentList)
       }

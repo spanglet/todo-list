@@ -26,6 +26,10 @@ class Task(db.Model):
         db.Integer,
         db.ForeignKey('category.id')
     )
+    completed = db.Column(
+        db.Boolean,
+        default = False
+    )
 
     #dependantsID INTEGER REFERENCES Tasks(id),
     #priority INTEGER,

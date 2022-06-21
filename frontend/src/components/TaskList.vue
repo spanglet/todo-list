@@ -16,9 +16,7 @@
     data() {
       return {
         tasks: [],
-        visibleTasks: [],
         drag: false
-        
       }
     },
     mounted() {
@@ -28,11 +26,14 @@
       this.saveTaskOrder()
 
     },
+    watch: {
+      currentListID: 'loadTasks'
+    },
     methods: {
 
       loadTasks() {
         // Tasks fetched from Flask backend
-        this.axios.get("tasks/")
+        this.axios.get("lists/" + this.currentListID)
           .then((res) => {
             if (res.status == 200) {
               this.tasks = res.data
@@ -45,25 +46,32 @@
        * Sends delete request to remove selected task from backend.
        * Requests tasks again after OK response. TO CHANGE AS ITS INEFFICIENT
        */
-      deleteTask(task_id, index) {
-        var targetPath = "tasks/" + task_id
-        this.axios.delete(targetPath)
+      deleteTask(task_id) {
+        this.axios.delete("tasks/" + task_id.toString())
           .then((res) => {
             if (res.status == 200) {
               this.loadTasks()
             }
           })
       },
+      sendTaskCompletion(task_id) {
+        this.axios.put("tasks/" + task_id, {
+            'completed': true
+          })
+          .then((res) => {
+            this.loadTasks()
+          })
+      },
       saveTaskOrder() {
-        taskOrder = this.visibleTasks.map(({taskID}) => taskID)
+        taskOrder = this.currentTasks.map(({taskID}) => taskID)
         this.axios.put("tasks/",{
             'task_order': taskOrder
           })
       }
     },
     computed: {
-      updateCurrentTasks() {
-        this.visibleTasks = this.tasks.filter(task => task["listID"] == this.currentListID)
+      currentTasks() {
+        return this.tasks.filter(task => task["listID"] == this.currentListID)
       }
     }
   }
@@ -73,7 +81,7 @@
   <div class='task-list'>
     <ListHeader class="item" @view-changed='loadTasks' />
     <draggable 
-      :list="visibleTasks" 
+      :list="tasks" 
       @start="drag=true" 
       @end="drag=false" 
       item-key="id"
@@ -85,7 +93,8 @@
           :name="element.name"
           :description="element.description"
           :dueDate="element.trueDueDate"
-          @remove-item='deleteTask(element.id, index)'
+          @remove-item='deleteTask(element.id)'
+          @task-completed='sendTaskCompletion(element.id)'
         />
       </template>
 
@@ -100,6 +109,7 @@
     display: flex;
     flex-flow: column nowrap;
     gap: 3px;
+    padding: 5px;
   }
   .ghost {
     opacity: 0.5;

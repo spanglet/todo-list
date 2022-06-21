@@ -47,7 +47,14 @@ def register():
             description =  "Main list",
             userID = user_id
         )
+        completed_list = List(
+            name = "Completed Tasks",
+            description =  "Contains all tasks that you successfully completed.",
+            userID = user_id,
+            id = -1
+        )
         db.session.add(main_list)
+        db.session.add(completed_list)
         db.session.commit()
 
     except ValidationError as err:

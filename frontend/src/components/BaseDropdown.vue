@@ -87,7 +87,7 @@
     gap: 5px;
     margin: 10px;
     position: absolute;
-    top: 100%;
+    top: 3em;
     color: white;
     background: hsl(var(--hue-purple),100%,var(--lgt-3));
     border-radius: 0px 0px 5px 5px;

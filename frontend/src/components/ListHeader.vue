@@ -58,7 +58,6 @@
     align-items: stretch;
     height: 46px;
     color: white;
-    border-bottom: 2px solid black;
     font-size: 20px;
   }
   .col-header {

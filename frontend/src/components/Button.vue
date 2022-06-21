@@ -20,9 +20,10 @@
 <style>
   .button {
     display: flex;
-    border-radius: 9px;
+    border-radius: 8px;
     align-items: center;
     justify-content: center;
+    border: 1px black solid;
     
   }
 

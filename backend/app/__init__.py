@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 from .db_models import db
 
-REINIT_DB = False
+REINIT_DB = True
 
 def create_app(test_config=None):
     # create and configure the app

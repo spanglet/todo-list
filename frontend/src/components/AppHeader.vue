@@ -53,9 +53,6 @@
     align-items: center;
     background: hsl(var(--hue-purple), 100%, var(--lgt-2));
     color: white;
-    border: solid;
-    border-width: 1px;
-    border-color: darkgrey;
     position: relative;
   }
   .app-header > * {

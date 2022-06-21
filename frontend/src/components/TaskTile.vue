@@ -9,7 +9,8 @@
     <div class="col">
       <div>{{formattedDueDate}}</div>
     </div>  
-    <Button class="tile-del-button" :action="removeItem"  btn-type="xmark" />
+    <Button class="tile-button del-button" :action="removeItem"  btn-type="xmark" />
+    <Button class="tile-button done-button" :action="markTaskCompleted" btn-type="check" />
   </div>
 </template>
 
@@ -40,6 +41,9 @@
       // Emit delete event to App parent container
       removeItem() {
         this.$emit('removeItem')
+      },
+      markTaskCompleted() {
+        this.$emit('taskCompleted')
       }
     },
     computed: {
@@ -63,9 +67,9 @@
     justify-content: center;
     margin: 0;
     list-style: none;
-    border: 2px darkgrey;
+    border: 2px #b378cc outset;
     border-radius: 8px;
-    background:  #bb8fce;
+    background: #bb8fce;
     gap: 5px;
     height: 40px;
   }
@@ -77,11 +81,15 @@
     font-size: 20px;
     flex: 1;
   }
-  .tile-del-button {
+  .tile-button {
     margin: 2px; 
-    background: darksalmon;
-    width: 5%;
+    width: 4%;
   }
-  
+  .del-button {
+    background: darksalmon;
+  }
+  .done-button {
+    background: lightgreen;
+  }
 
 </style>

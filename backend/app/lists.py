@@ -4,7 +4,9 @@ from flask import request, Blueprint, jsonify, make_response
 from marshmallow import Schema, fields
 from marshmallow.exceptions import ValidationError
 
-from .db_models import db, List
+from .db_models import db, List, Task
+from .schema import TaskSchema
+from .auth import login_required
 
 # Schema for JSON post/put data validation
 class ListSchema(Schema):
@@ -17,6 +19,7 @@ app = Flask(__name__)
 bp = Blueprint('lists', __name__, url_prefix='/lists')
 
 # Creates a new task list
+@login_required
 @bp.route('/', methods=['POST','GET'])
 def new_list():
 
@@ -57,10 +60,11 @@ def new_list():
 @bp.route('/<list_id>', methods=['PUT','DELETE','GET'])
 def update_list(list_id):
 
-    data = request.get_json()
  
     # Update list with data of request if PUT request
     if request.method == 'PUT':
+
+        data = request.get_json()
 
         _list = List.query.filter_by(
                 id = list_id,
@@ -76,5 +80,13 @@ def update_list(list_id):
     # Remove list if DEL request received
     if request.method == 'DELETE':
         
-        db.session.delete(list_id)
-        return "List was successfully deleted",200
+        del_list = List.query.get(list_id)
+        db.session.delete(del_list)
+        db.session.commit()
+        return "List successfully removed", 200
+
+    if request.method == 'GET':
+
+        tasks = Task.query.filter_by(listID = list_id).all()
+        return TaskSchema().dumps(tasks, many=True), 200
+

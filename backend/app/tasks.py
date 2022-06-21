@@ -4,16 +4,14 @@ from flask import request, Blueprint, jsonify
 from marshmallow import Schema, fields, ValidationError
 
 from .db_models import db,Task
+from .auth import login_required
+from .schema import TaskSchema
 
 # Schema for JSON post/put data validation
-class TaskSchema(Schema):
-    name=fields.Str(required=True)
-    description=fields.Str()
-    trueDueDate=fields.Date()
-    listID=fields.Int()
 
 bp = Blueprint('tasks', __name__, url_prefix='/tasks')
 
+@login_required
 @bp.route('/', methods=['POST','GET'])
 def manage_tasks():
 
@@ -31,7 +29,7 @@ def manage_tasks():
                 name = data["name"],
                 description = data["description"],
                 trueDueDate = data["trueDueDate"],
-                listID = fields.Int()
+                listID = data["listID"]
             )
             db.session.add(new_task)
             db.session.commit()
@@ -41,15 +39,17 @@ def manage_tasks():
   
         return "task successfully added",200
 
-  # GET requests for entire contents of tasks in db
+    # GET requests for entire contents of tasks in db
     if request.method == 'GET':
 
         try:
             tasks = Task.query.all() 
         except:
             return "Error in querying all records from Task table", 404
+
+        json_tasks = TaskSchema(many=True).dumps(tasks)
  
-        return jsonify(tasks),200
+        return json_tasks, 200
 
 
 @bp.route('/<task_id>', methods=['PUT','DELETE','GET'])
@@ -59,7 +59,12 @@ def update_task(task_id):
     if request.method == 'PUT':
         
         data = request.get_json()
-        task = Task.get(task_id)
+
+        if "completed" in data:
+
+            data["listID"] = -1
+
+        task = Task.query.get(task_id)
        
         # Update Task object that was retrieved
         for key,val in data.items():
@@ -71,6 +76,7 @@ def update_task(task_id):
     # Remove task if DEL request received
     if request.method == 'DELETE':
 
-        db.session.delete(task_id)
+        del_task = Task.query.get(task_id)
+        db.session.delete(del_task)
         db.session.commit()
         return "Task was successfully removed",200

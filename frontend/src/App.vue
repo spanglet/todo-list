@@ -105,9 +105,7 @@
       @lists-updated="loadLists"
       class='sidebar'
     />
-    <div class='list'>
-      <TaskList />
-    </div>
+    <TaskList class="main-area"/>
     <div class="footer"></div>
   </div>
 </template>
@@ -131,12 +129,10 @@
     grid-area: header;
     margin: 0; 
   }
-  .list {
-    display: flex;
+  .main-area {
     grid-area: main;
-    align-content: stretch;
-    flex-flow: column nowrap;
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+    padding: .5em;
   }
   .sidebar {
     margin: 0;
@@ -153,10 +149,6 @@
     height: 50px;
     width: 120px;
     
-  }
-  .list > * {
-    flex: 1 100%;
-    padding: 5px;
   }
 </style>
 

@@ -29,7 +29,7 @@
 
   .icon {
     margin: 1px;
-    height: 100%;
+    height: 90%;
   }
 
 </style>

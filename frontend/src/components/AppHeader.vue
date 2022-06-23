@@ -5,6 +5,7 @@
     <div class="header-item header-title"> To-Do List </div>
       <BaseDropdown 
         header-text="My Account"
+        :links="links"
         class="header-item header-menu"
       />
   </div>
@@ -20,9 +21,15 @@
       "BaseDropdown": BaseDropdown
     },
     data() {
-       return {
-        menuExpanded: false
-       }
+      return {
+        menuExpanded: false,
+        links: [
+          { "name": "Logout",
+           "path": "/logout" },
+          { "name": "My Account",
+           "path": ""}
+        ]
+      }
     },
     methods: {
 

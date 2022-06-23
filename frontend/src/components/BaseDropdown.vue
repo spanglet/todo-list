@@ -11,10 +11,11 @@
     <TransitionGroup>
       <div class="expanded-group" v-if="expanded">
         <div
-          v-for="item in dropdownItems"
+          v-for="link in links"
           :key="list"
           class="expanded-item"
-        > {{ item }}
+        >
+          <router-link :to="link.path"> {{ link.name }} </router-link>
         </div>
       </div>
     </TransitionGroup>
@@ -32,11 +33,10 @@
     components: {
       Button
     },
-    props: ["headerText"],
+    props: ["headerText","links"],
     data() {
       return {
         expanded: false,
-        dropdownItems: ["Logout", "Account Info"]
       }
     },
     computed: {

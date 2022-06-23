@@ -1,4 +1,5 @@
 import * as VueRouter from 'vue-router'
+import { axios } from "./axios.js"
 
 import App from './App.vue'
 import Login from './Login.vue'
@@ -17,6 +18,13 @@ const routes = [
 const router = VueRouter.createRouter({
   history: VueRouter.createWebHistory(),
   routes,
+})
+
+router.beforeEach((to, from) => {
+  if (to.path == "/logout") {
+    axios.get("/auth/logout")
+    return {path: "/login"}
+  }
 })
 
 export {router}

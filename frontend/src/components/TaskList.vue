@@ -105,11 +105,16 @@
 
 <style>
 
+  .task-list {
+    background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+    min-width: 0;
+  }
+
   .list-group {
     display: flex;
     flex-flow: column nowrap;
     gap: 3px;
-    padding: 5px;
+    margin-top: .5em;
   }
   .ghost {
     opacity: 0.5;

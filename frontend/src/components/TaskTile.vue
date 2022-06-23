@@ -1,16 +1,18 @@
 <template> 
-  <div class="tile">
+  <div class="tile" @click="isExpanded=!isExpanded" :class="{ 'expanded-tile': isExpanded}">
     <div class="col">
-      <div>{{name}}</div>
+      {{name}}
+    </div>  
+    <div class="col description-col">
+      <p class="tile-text"> {{description}} </p>
     </div>  
     <div class="col">
-      <div>{{description}}</div>
+      {{formattedDueDate}}
     </div>  
-    <div class="col">
-      <div>{{formattedDueDate}}</div>
+    <div class="button-col">
+      <Button class="tile-button del-button" :action="removeItem"  btn-type="xmark" />
+      <Button class="tile-button done-button" :action="markTaskCompleted" btn-type="check" />
     </div>  
-    <Button class="tile-button del-button" :action="removeItem"  btn-type="xmark" />
-    <Button class="tile-button done-button" :action="markTaskCompleted" btn-type="check" />
   </div>
 </template>
 
@@ -29,6 +31,7 @@
     },
     data() {
       return {
+        isExpanded: false
       }
     },
     emits: ['removeItem'],
@@ -71,19 +74,41 @@
     border-radius: 8px;
     background: #bb8fce;
     gap: 5px;
-    height: 40px;
+    height: 3em;
+    transition: all 1s;
+  }
+  .expanded-tile {
+    height: 6em;
+    
+  }
+  .expanded-tile .tile-text {
+    white-space: normal;
   }
   .col {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1em;
     font-size: 20px;
     flex: 1;
   }
+  .button-col {
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+
+  }
+  .tile-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .description-col {
+    overflow: hidden;
+  }
   .tile-button {
     margin: 2px; 
-    width: 4%;
+    width: 4em;
+    max-height: 65px;
   }
   .del-button {
     background: darksalmon;

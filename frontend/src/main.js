@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
 	
 import { router } from './router.js'
+import { axios } from "./axios.js"
 import Wrapper from './Wrapper.vue'
 
-import axios from "axios"
 
 // Icon imports
 import { library } from "@fortawesome/fontawesome-svg-core"
@@ -16,11 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faPlus,faMinus,faCheck,faXmark,
 	faAngleDown,faAngleUp)
 
-axios.defaults.baseURL = 'http://127.0.0.1:5000/'
-axios.defaults.headers.post['Content-Type'] = "application/json"
-//axios.defaults.headers.common['Access-Control-Allow-Credentials'] = true
-//axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://127.0.0.1:5000'
-axios.defaults.withCredentials = true
 
 const app = createApp(Wrapper)
 	.component("font-awesome-icon", FontAwesomeIcon) 

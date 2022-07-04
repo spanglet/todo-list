@@ -14,8 +14,11 @@ class Task(db.Model):
     description = db.Column(db.String(255))
     trueDueDate = db.Column(
         db.DateTime,
-        nullable = False,
         default = datetime.utcnow
+    )
+    priority = db.Column(
+        db.Integer,
+        default = 1
     )
     listID = db.Column(
         db.Integer,
@@ -32,7 +35,6 @@ class Task(db.Model):
     )
 
     #dependantsID INTEGER REFERENCES Tasks(id),
-    #priority INTEGER,
     #preferredDueDate DATETIME,
 
 class Category(db.Model):

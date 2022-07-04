@@ -1,23 +1,32 @@
 <script>
 
-  import TaskList from './components/TaskList.vue'
   import AppHeader from './components/AppHeader.vue'
   import Sidebar from './components/Sidebar.vue'
+  import Footer from './components/Footer.vue'
   import { computed } from 'vue'
+
+  import { useTasks } from './stores/tasks.js'
 
   export default { 
 
+    setup() {
+      const store = useTasks()
+      return {
+        store,
+      }
+    },
     components: {
       AppHeader,
       Sidebar,
-      TaskList
+      Footer,
     },
     provide() {
       return {
-        currentListID: computed(() => this.currentList),
         currentLists: computed(() => this.lists),
-        currentTasks: computed(() => this.currentTasks)  
       }
+    },
+    mounted() {
+      this.$router.push("/app/todo")
     },
     data() {
       return {
@@ -27,33 +36,15 @@
           notify: false,
           changedItem: ""
         },
-        currentList: 1,
         lists: {}
       }
     },
     mounted() {
       this.loadLists()
-      this.loadTasks()
+      this.store.fetchTasks()
     },
     methods: {
 
-      loadTasks() {
-        // Tasks fetched from Flask backend
-        this.axios.get("tasks/")
-          .then((res) => {
-            this.tasks = res.data
-          })
-      },
-      deleteTask(task_id) {
-        // DELETE request to remove task from db
-        var targetPath = "tasks/" + String(task_id)
-        this.axios.delete(targetPath)
-          .then((res) => {
-            if (res.status == 200) {
-              this.reloadList()
-            }
-          })
-      },
       loadLists() {
         // GET request to Flask backend for list
         this.axios.get("lists/")
@@ -62,7 +53,7 @@
           })
       },
       changeActiveList (listID) {
-        this.currentList = listID
+        this.store.currentListID = listID
       },
       removeList (list) {
 
@@ -75,23 +66,15 @@
         }, 3000)
         this.notification.notify = false
       },
-      saveTaskOrder() {
-        taskOrder = this.currentTasks.map(({taskID}) => taskID)
-        this.axios.put("tasks/",{
-            'task_order': taskOrder
-          })
-      }
-    },
-    computed: {
-      currentTasks() {
-        return this.tasks.filter(task => task["listID"] == this.currentList)
-      }
+      setFormVisibility(visible) {
+        this.store.taskFormActive = visible
+      },
     }
   }
 </script>
 
 <template>
-  <div class='app'>
+  <div class='app' @click='setFormVisibility(false)'>
     <AppHeader class='header' />
     <div
       class="notification header"
@@ -105,40 +88,64 @@
       @lists-updated="loadLists"
       class='sidebar'
     />
-    <TaskList class="main-area"/>
-    <div class="footer"></div>
+    <router-view class="app-main"></router-view>
+    <Footer class="footer-area" />
+    <div class="edge"></div>
   </div>
 </template>
 
 <style>
 
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
   .app {
     display: grid;
-    margin: 0;
-    grid-template-columns: 2fr 12fr 1fr;
-    grid-template-rows: 3fr 17fr 1fr;
+    grid-template-columns:
+      minmax(120px, 2fr)
+      minmax(400px, 8fr)
+      minmax(300px, 4fr)
+      minmax(20px, 1fr);
+    grid-template-rows:
+      minmax(60px, 2fr)
+      minmax(60px, 1fr)
+      minmax(450px, 15fr)
+      minmax(80px, 2fr);
     grid-template-areas:
-      "header header header"
-      "sidebar main edge"
-      "footer footer footer";
+      "header header header header"
+      "sidebar app-header app-header edge"
+      "sidebar app-main app-main-right edge"
+      "footer footer footer footer";
     height: 100vh;
     width: 100vw;
+    font-family: Helvetica, sans-serif;
   } 
-
+  .app-main {
+    grid-area: app-header / app-main / app-main / app-main-right;
+    margin: 5px;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+  }
   .header {
     grid-area: header;
-    margin: 0; 
-  }
-  .main-area {
-    grid-area: main;
-    background: hsl(var(--hue-purple), 100%, var(--lgt-6));
-    padding: .5em;
   }
   .sidebar {
     margin: 0;
     grid-area: sidebar;
+    position: relative;
+    box-shadow: 4px 0px 8px -7px black;
   }
-  .footer {
+  .edge {
+    grid-area: edge;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-4));
+  }
+  .footer-area {
     grid-area: footer;
     background: #b3b6b7;
     margin: 0;
@@ -148,7 +155,6 @@
     background: hsl(var(--hue-purple), 100%, var(--lgt-5));
     height: 50px;
     width: 120px;
-    
   }
 </style>
 

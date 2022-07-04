@@ -61,9 +61,10 @@
     background: hsl(var(--hue-purple), 100%, var(--lgt-2));
     color: white;
     position: relative;
+    box-shadow: 0 4px 8px -7px black;
   }
   .app-header > * {
-    flex: 1;
+   flex: 1;
   }
   .header-title {
     display: flex;

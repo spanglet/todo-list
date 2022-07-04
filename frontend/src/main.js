@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 	
 import { router } from './router.js'
 import { axios } from "./axios.js"
+import { createPinia } from 'pinia'
 import Wrapper from './Wrapper.vue'
 
 
@@ -16,13 +17,13 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(faPlus,faMinus,faCheck,faXmark,
 	faAngleDown,faAngleUp)
 
-
+const pinia = createPinia()
 const app = createApp(Wrapper)
 	.component("font-awesome-icon", FontAwesomeIcon) 
 	.use(router)
+  .use(pinia)
 
 app.config.globalProperties.axios = axios
-
 app.mount('#app')
 
 // Temporarily required to makeinjections automatically unwrap computed refs

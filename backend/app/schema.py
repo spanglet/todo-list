@@ -6,13 +6,16 @@ class UserSchema(Schema):
     password = fields.Str(required = True)
 
 class ListSchema(Schema):
+    """Schema for List JSON post/put data validation"""
     name = fields.Str(required=True)
     description = fields.Str()
     id = fields.Integer()
 
 class TaskSchema(Schema):
-    name=fields.Str(required=True)
-    description=fields.Str()
-    trueDueDate=fields.Date()
-    listID=fields.Int()
+    """Schema for Task JSON post/put data validation"""
+    name = fields.Str(required=True)
+    description = fields.Str()
+    trueDueDate = fields.Date()
+    listID = fields.Int()
+    priority = fields.Str()
     id = fields.Int()

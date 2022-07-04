@@ -1,5 +1,5 @@
 <template> 
-  <div class="tile" @click="isExpanded=!isExpanded" :class="{ 'expanded-tile': isExpanded}">
+  <div class="tile" @click="isExpanded=!isExpanded" :class="{ 'expanded-tile': isExpanded, 'removed-tile': isRemoved}">
     <div class="col">
       {{name}}
     </div>  
@@ -31,7 +31,8 @@
     },
     data() {
       return {
-        isExpanded: false
+        isExpanded: false,
+        isRemoved: false
       }
     },
     emits: ['removeItem'],
@@ -43,14 +44,20 @@
     methods: {
       // Emit delete event to App parent container
       removeItem() {
-        this.$emit('removeItem')
+        this.isRemoved = true
+        setTimeout(() => {
+          this.$emit('removeItem')
+        }, 800)
       },
       markTaskCompleted() {
-        this.$emit('taskCompleted')
+        this.isRemoved = true
+        setTimeout(() => {
+          this.$emit('taskCompleted')
+          //this.isRemoved = false
+        }, 800)
       }
     },
     computed: {
-  
       formattedDueDate() {
         var date = new Date(this.dueDate)
         return days[date.getDay()] + ", " +
@@ -75,14 +82,16 @@
     background: #bb8fce;
     gap: 5px;
     height: 3em;
-    transition: all 1s;
+    transition: all .5s;
   }
   .expanded-tile {
     height: 6em;
-    
   }
   .expanded-tile .tile-text {
     white-space: normal;
+  }
+  .removed-tile {
+    opacity: 0;
   }
   .col {
     display: flex;
@@ -95,7 +104,6 @@
     display: flex;
     justify-content: flex-end;
     align-items: stretch;
-
   }
   .tile-text {
     overflow: hidden;

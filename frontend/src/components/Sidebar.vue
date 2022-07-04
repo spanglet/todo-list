@@ -7,12 +7,19 @@
       @view-form="toggleForm"
       @list-removed="removeList"
       @list-changed="changeList"
+      @click="$router.push('/app/todo')"
     />
+    <div @click="$router.push('/app/calendar')">
+      Calendar
+    </div>
     <div
       v-if="showForm"
-      class="list-form">
+      class="list-form"
+    >
+      <label for="list-name"> List Name </label>
       <input
         v-model="name"
+        id="list-name"
         type="text"
         placeholder="Name"
       >
@@ -36,7 +43,6 @@
       SidebarTile,
       Button
     },
-    inject: ["currentListID"],
     emits: [
       'listChanged',
       'listsUpdated',
@@ -101,17 +107,18 @@
     align-items: stretch;
     margin: 8px;
     gap: 3px;
-
   }
-  
-.list-form {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  height: 20px;
-  
-
-}
+  .list-form {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: .5em;
+    margin: 3px;
+  }
+  .list-form input {
+    font-size: 18pt;
+  }
 
 </style>
 

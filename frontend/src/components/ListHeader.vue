@@ -1,4 +1,5 @@
 <template>
+
  <div>
   <div class="list-header">
     <div class="col-header"> Name </div>
@@ -6,7 +7,6 @@
     <div class="col-header"> Due Date </div>
     <Button class="plus-button" :btn-type="buttonIcon" :action="changeFormVisibility" />
   </div>
-  <Form @submitted='changeFormVisibility' v-if="formVisible"> </Form>
  </div>
 
 </template>
@@ -15,32 +15,38 @@
 <script>
 
   import Button from "./Button.vue"
-  import Form from "./Form.vue"
+  import { useTasks } from "../stores/tasks.js"
+
   export default { 
 
-    components: {
-      Button,
-      Form
+    setup() {
+      const store = useTasks()
+      return {
+        store,
+      }
     },
-    emits: ['viewChanged'],
+    components: {
+      Button
+    },
+    //emits: ['formVisible'],
     data() {
       return {
         name: "",
         description: "",
         tasks: {},
-        formVisible: false,
-        buttonIcon: "plus"
       }
     },
     methods: { 
       // triggered on successful form submission
       // emits event up to main container for list refresh
       changeFormVisibility() {
-        this.formVisible = !this.formVisible
-        this.$emit('viewChanged')
-
-        // Also change button icon
-        this.buttonIcon = (this.formVisible ? "minus" : "plus")
+        this.store.taskFormActive = !this.store.taskFormActive
+      }
+    },
+    computed: {
+      buttonIcon() {     
+        /**  Icon is minus ( - ) if form expanded ( + ) if inactive */
+        return (this.store.taskFormActive ? "minus" : "plus")
       }
     }
   }
@@ -51,25 +57,25 @@
 <style>
 
   .list-header {
- 
     display: flex;
     list-style: none;
     justify-content:center;
     align-items: stretch;
-    height: 46px;
     color: white;
     font-size: 20px;
+    margin: .4em;
+    border-radius: 8px;
+    border: 1px solid black;
+    background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
+    box-shadow: 0 4px 8px -7px black;
   }
   .col-header {
     display: flex;
-    background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
     flex: 5;
     text-align: center;
-    border-radius: 8px;
     align-items: center;
     justify-content: center;
     border-left: 2px solid black;
-    border-right: 2px solid black;
   }
   .plus-button {
     display: flex;

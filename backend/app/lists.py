@@ -51,7 +51,7 @@ def new_list():
  
     if request.method == 'GET':
         
-        lists = List.query.filter_by(userID = session["user_id"]).all()
+        lists = List.query.filter(List.userID == session["user_id"], List.id > -1).all()
 
         return ListSchema().dumps(lists, many=True), 200
  

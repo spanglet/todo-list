@@ -9,10 +9,10 @@
       <label for="password">Password</label>
       <input type="password" v-model="password" name="password" required>
       <button class="login-submit-btn" @click="authenticate"> Submit </button>
-      <router-link to="/register" class="create-account-btn">Create a New Account</router-link>
+      <router-link to="/register" class="create-account-btn">
+        Create a New Account
+      </router-link>
     </div>
-    
-
   </div>
 
 </template>
@@ -58,7 +58,9 @@
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    background: lightgrey;
+    font-size: 18pt;
+    border-radius: 10px;
+    background: hsl(var(--hue-blue), 100%, var(--lgt-6));
   }
   .login-form {
     display: flex;
@@ -71,9 +73,12 @@
     border: 3px solid black;
     border-radius: 10px;
     color: white;
+    box-shadow: 5px 6px 15px 3px gray;
   }
   .login-submit-btn {
     font-size: 20pt;
+    border: 1px black solid;
+    border-radius: 15px;
   }
   .create-account-btn {
     display: flex;
@@ -83,6 +88,7 @@
     color: black;
     text-decoration: none;
     background: lightgrey;
+    border: 1px black solid;
   }
 
 </style>

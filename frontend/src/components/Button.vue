@@ -1,5 +1,6 @@
 <template>
-  <button class="button" :class="btnType" @click="action">
+  <button class="button" :class="btnType" @click.stop="action">
+    <slot></slot>
     <font-awesome-icon class="icon" :icon="btnType" />
   </button>
 </template>
@@ -20,16 +21,23 @@
 <style>
   .button {
     display: flex;
-    border-radius: 8px;
+    border-radius: 9px;
     align-items: center;
     justify-content: center;
     border: 1px black solid;
-    
+    font-weight: bold;
   }
 
   .icon {
-    margin: 1px;
-    height: 90%;
+    margin: 3px;
+    min-height: 2.5em;
+
+  }
+  .button:hover {
+    filter: brightness(.95);
+  }
+  .button:active {
+    filter: brightness(.75);
   }
 
 </style>

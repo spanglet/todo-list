@@ -3,7 +3,6 @@
     <ListHeader class="todo-header" />
     <TaskList class="list-area" />
     <TaskForm
-      @click.stop=''
       @submitted="setFormVisibility(false)"
       class="task-form"
     />

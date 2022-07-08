@@ -25,9 +25,6 @@
         currentLists: computed(() => this.lists),
       }
     },
-    mounted() {
-      this.$router.push("/app/todo")
-    },
     data() {
       return {
         tasks: [],
@@ -36,12 +33,15 @@
           notify: false,
           changedItem: ""
         },
-        lists: {}
+        lists: {},
       }
     },
-    mounted() {
+    beforeMount() {
       this.loadLists()
       this.store.fetchTasks()
+    },
+    mounted() {
+      this.$router.push("/app/todo")
     },
     methods: {
 
@@ -53,7 +53,11 @@
           })
       },
       changeActiveList (listID) {
+        this.store.filter = 'none'
         this.store.currentListID = listID
+        setTimeout(() => {
+          this.store.filter = 'currentList'
+        }, 1000)
       },
       removeList (list) {
 

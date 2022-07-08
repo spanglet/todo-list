@@ -9,9 +9,7 @@
 
 </template>
 
-
 <script>
-
 
   export default {
     data() {
@@ -25,8 +23,7 @@
       this.axios.get("auth/login")
 	      .then((res) => {
           if (res.data["activeSession"]) {
-            //this.$router.push('/app')
-            this.$router.push('/app/calendar')
+            this.$router.push('/app/todo')
           }
           else {
             this.$router.push('/login')

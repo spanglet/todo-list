@@ -15,14 +15,14 @@
           v-for="list in currentLists"
           :key="list.id"
           :class="{ 'active-list': isActiveList(list.id) }"
-          @click="changeList(list.id)">
-
+          @click="changeList(list.id)"
+        >
             {{ list.name }}
 
-            <Button
-              class="del-list-btn"
-              btn-type="xmark"
+            <SymbolButton
               @click="this.$emit('listRemoved', list)"
+              :icons="['xmark']"
+              class="del-btn"
             />
 
         </div>
@@ -35,15 +35,16 @@
           Completed Tasks
         </div>
 
-        <Button
+        <SymbolButton
           class="new-list-btn"
           v-if="expanded"
-          btn-type="plus"
+          :icons="['plus']"
           @click="this.$emit('viewForm')"
-        > New List </Button>
-      </div>
-    </TransitionGroup>
+        > New List </SymbolButton>
 
+      </div>
+
+    </TransitionGroup>
   </div>
 
 </template>
@@ -51,7 +52,7 @@
 
 <script>
 
-  import Button from "./Button.vue"
+  import SymbolButton from "./SymbolButton.vue"
   import { useTasks } from '../stores/tasks.js'
 
   export default {
@@ -62,7 +63,7 @@
       }
     },
     components: {
-      Button
+      SymbolButton
     },
     inject: ['currentLists'],
     props: ["text"],
@@ -85,7 +86,11 @@
       },
       // Emit the list change to the root (App) component for handling
       changeList (list_id) {
+        this.store.filter = 'none'
         this.store.currentListID = list_id
+        setTimeout(() => {
+          this.store.filter = 'currentList'
+        }, 500)
       },
       isActiveList (listID) {
         return (this.store.currentListID == listID)
@@ -135,7 +140,7 @@
     text-align: left;
     flex: 1;
   }
-  .del-list-btn {
+  .del-btn {
     background: salmon;
   }
   .v-enter-active,

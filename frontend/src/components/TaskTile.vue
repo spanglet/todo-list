@@ -10,8 +10,16 @@
       {{formattedDueDate}}
     </div>  
     <div class="button-col">
-      <Button class="tile-button del-button" :action="removeItem"  btn-type="xmark" />
-      <Button class="tile-button done-button" :action="markTaskCompleted" btn-type="check" />
+      <SymbolButton
+          class="tile-button del-button"
+          @click="removeItem"
+          :icons="['xmark']"
+      />
+      <SymbolButton
+          class="tile-button done-button"
+          @click="markTaskCompleted"
+          :icons="['check']"
+      />
     </div>  
   </div>
 </template>
@@ -19,7 +27,7 @@
 
 <script>
 
-  import Button from "./Button.vue"
+  import SymbolButton from "./SymbolButton.vue"
   
   var days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat']
   var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -27,7 +35,7 @@
 
   export default { 
     components: {
-      Button
+      SymbolButton
     },
     data() {
       return {
@@ -45,16 +53,11 @@
       // Emit delete event to App parent container
       removeItem() {
         this.isRemoved = true
-        setTimeout(() => {
-          this.$emit('removeItem')
-        }, 800)
+        this.$emit('removeItem')
       },
       markTaskCompleted() {
         this.isRemoved = true
-        setTimeout(() => {
-          this.$emit('taskCompleted')
-          //this.isRemoved = false
-        }, 800)
+        this.$emit('taskCompleted')
       }
     },
     computed: {
@@ -62,8 +65,9 @@
         var date = new Date(this.dueDate)
         return days[date.getDay()] + ", " +
             months[date.getMonth()] + " " +
-            date.getDate() 
-      }
+            (date.getDate() + 1)
+      },
+
     }
   }
 </script>

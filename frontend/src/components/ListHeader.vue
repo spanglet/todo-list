@@ -5,7 +5,10 @@
     <div class="col-header"> Name </div>
     <div class="col-header"> Description </div>
     <div class="col-header"> Due Date </div>
-    <Button class="plus-button" :btn-type="buttonIcon" :action="changeFormVisibility" />
+    <SymbolButton
+      :icons="buttonIcons"
+      @click ="changeFormVisibility"
+    />
   </div>
  </div>
 
@@ -14,7 +17,7 @@
 
 <script>
 
-  import Button from "./Button.vue"
+  import SymbolButton from "./SymbolButton.vue"
   import { useTasks } from "../stores/tasks.js"
 
   export default { 
@@ -26,14 +29,14 @@
       }
     },
     components: {
-      Button
+      SymbolButton,
     },
-    //emits: ['formVisible'],
     data() {
       return {
         name: "",
         description: "",
         tasks: {},
+        buttonIcons: ["plus", "minus"],
       }
     },
     methods: { 
@@ -43,12 +46,6 @@
         this.store.taskFormActive = !this.store.taskFormActive
       }
     },
-    computed: {
-      buttonIcon() {     
-        /**  Icon is minus ( - ) if form expanded ( + ) if inactive */
-        return (this.store.taskFormActive ? "minus" : "plus")
-      }
-    }
   }
 
 </script>
@@ -76,11 +73,6 @@
     align-items: center;
     justify-content: center;
     border-left: 2px solid black;
-  }
-  .plus-button {
-    display: flex;
-    flex: 1;
-    background: hsl(var(--hue-green), 100%, var(--lgt-3));
   }
 
 </style>

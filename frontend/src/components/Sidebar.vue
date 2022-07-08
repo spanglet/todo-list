@@ -9,7 +9,7 @@
       @list-changed="changeList"
       @click="$router.push('/app/todo')"
     />
-    <div @click="$router.push('/app/calendar')">
+    <div @click="$router.push('/app/calendar')" class="sidebar-tile">
       Calendar
     </div>
     <div
@@ -23,9 +23,9 @@
         type="text"
         placeholder="Name"
       >
-      <Button
-        :btn-type="submitIcon"
-        :action="createList"
+      <SymbolButton
+        :icons="submitIcon"
+        @click="createList"
       />
     </div>
   </div>
@@ -36,12 +36,12 @@
 <script>
 
   import SidebarTile from "./SidebarTile.vue"
-  import Button from "./Button.vue"
+  import SymbolButton from "./SymbolButton.vue"
 
   export default {
     components: {
       SidebarTile,
-      Button
+      SymbolButton
     },
     emits: [
       'listChanged',
@@ -50,7 +50,7 @@
     ],
     data() {
       return {
-        submitIcon: "check",
+        submitIcon: ["check"],
         showForm: false,
         name: "",
       }

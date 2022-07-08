@@ -5,10 +5,11 @@
     <div class="cal-header" v-for="dayName in daysInWeek">
       {{ dayName }} 
     </div>
+    <div v-for="i in startDay" class="inactive-day">
+      <div></div>
+    </div>
     <div v-for="day in days" class="day">
-      <CalendarTile :date="new Date(year, month, day)">
-        {{ day }} 
-      </CalendarTile>
+      <CalendarTile :date="new Date(year, month, day)" />
     </div>
   </div>
 
@@ -33,9 +34,8 @@
     }, 
     data() {
       return {
-        days: Array.from({length: 30}, (_, i) => i + 1),
-        month: new Date().getMonth(),
         year: new Date().getFullYear(),
+        month: new Date().getMonth(),
         daysInWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
             'Thursday', 'Friday', 'Saturday']
       }
@@ -43,8 +43,14 @@
     mounted() {
       this.store.fetchTasks()
     },
-    methods: {
-
+    computed: {
+      days() {
+        var numDays = (new Date(this.year, this.month, 0)).getDate()
+        return Array.from({length: numDays}, (_, i) => i + 1)
+      },
+      startDay() {
+        return (new Date(this.year, this.month, 1)).getDay()
+      }
     }
   }
 </script>

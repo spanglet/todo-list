@@ -22,7 +22,7 @@
       }
     },
     components: {
-      BaseForm
+      BaseForm,
     },
     data() {
       return {

@@ -4,7 +4,7 @@ import { axios } from "../axios.js"
 export const useTasks = defineStore('tasks', {
   state: () => ({
     tasks: [],
-    /** @type {'all' | 'completed' | 'incomplete' | 'currentList'} */
+    /** @type {'all' | 'completed' | 'incomplete' | 'currentList' | 'none'} */
     filter: 'currentList',
     currentListID: 1,
     taskFormActive: false,
@@ -32,6 +32,9 @@ export const useTasks = defineStore('tasks', {
       else if (this.filter === 'currentList') {
         return this.currentListTasks
       }
+      else if (this.filter === 'none') {
+        return []
+      }
       return this.tasks
     },
   },
@@ -49,11 +52,13 @@ export const useTasks = defineStore('tasks', {
       // DELETE request to remove task from db
       var targetPath = "tasks/" + String(task_id)
       var response = await axios.delete(targetPath)
-      this.fetchTasks()
+      //this.fetchTasks()
     },
     async addTask(data) {
+      
       var response = await axios.post('tasks/', data)
-      this.fetchTasks()
+      this.tasks.push(data)
+      //this.fetchTasks()
     },
     async completeTask(task_id) {
       await axios.put("tasks/" + task_id, {
@@ -67,7 +72,7 @@ export const useTasks = defineStore('tasks', {
       })
     },
     getTasksOnDate(date) {
-      return this.tasks.filter((task) => (new Date(task.trueDueDate)).toDateString() === date.toDateString())
+      return this.tasks.filter((task) => task.trueDueDate === date)
     },
   }
 })

@@ -5,10 +5,14 @@
     <div class="col-header"> Name </div>
     <div class="col-header"> Description </div>
     <div class="col-header"> Due Date </div>
-    <SymbolButton
-      :icons="buttonIcons"
-      @click ="changeFormVisibility"
-    />
+    <div class="button-col">
+      <SymbolButton
+        :icons="buttonIcons"
+        @click.stop="changeFormVisibility"
+      >
+        New Task
+      </SymbolButton>
+    </div>
   </div>
  </div>
 
@@ -50,7 +54,6 @@
 
 </script>
 
-
 <style>
 
   .list-header {
@@ -68,7 +71,7 @@
   }
   .col-header {
     display: flex;
-    flex: 5;
+    flex: 2;
     text-align: center;
     align-items: center;
     justify-content: center;

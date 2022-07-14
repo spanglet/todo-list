@@ -1,7 +1,9 @@
 <template>
   
   <Transition tag="div">
-    <BaseButton :class="currentClass" @click="onClick" :btnType="currentIcon" />
+    <BaseButton :class="currentClass" @click="onClick" :btnType="currentIcon">
+      <slot />
+    </BaseButton>
   </Transition>
   
 </template>

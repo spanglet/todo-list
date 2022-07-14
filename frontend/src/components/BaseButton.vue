@@ -25,8 +25,9 @@
     justify-content: center;
     border: 1px black solid;
     font-weight: bold;
+    font-size: 1em;
+    padding: 0 10px 0 10px;
   }
-
   .icon {
     margin: 3px;
     min-height: 2em;

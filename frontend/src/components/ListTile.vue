@@ -9,7 +9,7 @@
     
         {{ list.name }}
     
-        <Button
+        <SymbolButton
           class="del-btn"
           btn-type="xmark"
           @click="this.$emit('listRemoved', list)"
@@ -24,17 +24,23 @@
       Completed Tasks
     </div>
     
-    <Button
-      class="new-list-btn"
+    <SymbolButton
       v-if="expanded"
-      btn-type="plus"
+      icons="['plus']"
       @click="this.$emit('viewForm')"
-    > New List </Button>
+      class="new-list-btn"
+    > New List </SymbolButton>
   </div>
 </template>
 
 <script>
   export default {
+
+  data() {
+    return {
+
+    }
+  }
 
   }
 </script>

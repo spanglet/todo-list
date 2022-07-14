@@ -133,7 +133,6 @@
   } 
   .app-main {
     grid-area: app-header / app-main / app-main / app-main-right;
-    margin: 5px;
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
   }
   .header {

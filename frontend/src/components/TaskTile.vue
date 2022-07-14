@@ -102,12 +102,13 @@
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    flex: 1;
+    flex: 2;
   }
   .button-col {
     display: flex;
     justify-content: flex-end;
     align-items: stretch;
+    flex: 1;
   }
   .tile-text {
     overflow: hidden;

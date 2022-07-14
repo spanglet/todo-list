@@ -1,5 +1,4 @@
 
-
 <template>
 
   <Transition>
@@ -29,7 +28,6 @@
       } 
     }
   }
-
 
 </script>
 

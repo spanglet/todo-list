@@ -10,41 +10,21 @@
 
     <TransitionGroup>
       <div class="sidebar-expanded-group" v-if="expanded">
+
         <div 
           class="sidebar-expanded-item"
-          v-for="list in currentLists"
-          :key="list.id"
-          :class="{ 'active-list': isActiveList(list.id) }"
-          @click="changeList(list.id)"
+          v-for="route in routes"
+          :key="route.id"
+          :class="{ 'active-route': isActiveRoute(route.id) }"
+          @click="routeTo(route.id)"
         >
-            {{ list.name }}
-
-            <SymbolButton
-              @click="this.$emit('listRemoved', list)"
-              :icons="['xmark']"
-              class="del-btn"
-            />
-
+          {{ route.name }}
         </div>
 
-        <div
-          class="completed-list sidebar-expanded-item"
-          @click="changeList(-1)"
-          :class="{ 'active-list': isActiveList(-1) }"
-        >
-          Completed Tasks
-        </div>
-
-        <SymbolButton
-          class="new-list-btn"
-          v-if="expanded"
-          :icons="['plus']"
-          @click="this.$emit('viewForm')"
-        > New List </SymbolButton>
-
+        <slot name="footer-slot"/>
       </div>
-
     </TransitionGroup>
+
   </div>
 
 </template>
@@ -52,7 +32,6 @@
 
 <script>
 
-  import SymbolButton from "./SymbolButton.vue"
   import { useTasks } from '../stores/tasks.js'
 
   export default {
@@ -63,21 +42,18 @@
       }
     },
     components: {
-      SymbolButton
+       
     },
-    inject: ['currentLists'],
-    props: ["text"],
+    props: ["text","path","routes"],
     data() {
       return {
         expanded: false,
-        lists: this.currentLists
       }
     },
-    emits: ['viewForm','listChanged', "listRemoved"],
     computed: {
       dropdownIcon() {
         return this.expanded ? 'angle-up' : 'angle-down'
-      }
+      },
     },
     methods: {
       // Expand or shrink when title is clicked
@@ -85,15 +61,11 @@
         this.expanded = !this.expanded
       },
       // Emit the list change to the root (App) component for handling
-      changeList (list_id) {
-        this.store.filter = 'none'
-        this.store.currentListID = list_id
-        setTimeout(() => {
-          this.store.filter = 'currentList'
-        }, 500)
+      isActiveRoute (route) {
+        return false
       },
-      isActiveList (listID) {
-        return (this.store.currentListID == listID)
+      routeTo(id) {
+        this.$router.push("/app/" + this.path + id.toString() )
       }
     }
   }
@@ -112,7 +84,7 @@
   }
   .sidebar-tile-header {
     display: flex;
-    font-size: 20pt;
+    font-size: 1.8em;
     justify-content: space-between;
     height: 30px;
     box-shadow: 0px 3px 9px -8px black;
@@ -120,11 +92,6 @@
   }
   .sidebar-tile-header:hover {
     background: hsl(var(--hue-purple),100%,var(--lgt-2));
-  }
-  .new-list-btn {
-    background: aquamarine;
-    font-size: 18pt;
-    justify-content: space-evenly;
   }
   .sidebar-expanded-group {
     display: flex;
@@ -140,9 +107,6 @@
     text-align: left;
     flex: 1;
   }
-  .del-btn {
-    background: salmon;
-  }
   .v-enter-active,
   .v-leave-active {
     transition: all .5s ease;
@@ -156,10 +120,6 @@
   }
   .active-list {
     background-color: hsl(var(--hue-purple),100%,var(--lgt-2));
-  }
-  .completed-list {
-    border-top: 2px solid black;
-    box-shadow: 0px -3px 9px -5px black;
   }
 
 </style>

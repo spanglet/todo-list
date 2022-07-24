@@ -18,19 +18,19 @@
 </script>
 
 <style>
+
   .button {
     display: flex;
-    border-radius: 9px;
+    border-radius: 10px;
     align-items: center;
     justify-content: center;
     border: 1px black solid;
     font-weight: bold;
     font-size: 1em;
-    padding: 0 10px 0 10px;
+    padding: 2px;
   }
   .icon {
-    margin: 3px;
-    min-height: 2em;
+
   }
   .button:hover {
     filter: brightness(.92);

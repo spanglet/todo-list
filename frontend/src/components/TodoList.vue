@@ -1,11 +1,14 @@
 <template>
+
   <div class="todo-main">
     <ListHeader class="todo-header" />
-    <TaskList class="list-area" />
-    <TaskForm
-      @submitted="setFormVisibility(false)"
-      class="task-form"
-    />
+    <div class="main-todo-area">
+      <TaskList class="list-area" :listID="id" />
+      <TaskForm
+        @submitted="setFormVisibility(false)"
+        class="task-form"
+      />
+    </div>
   </div>
 
 </template>
@@ -29,14 +32,21 @@
       TaskForm,
       ListHeader,
     },
+    props: ["id"],
     data() {
       return {
-        
+    
       }
+    },
+    watch: {
+      id: 'setListID'
     },
     methods: {
       setFormVisibility(visible) {
         this.store.taskFormActive = visible
+      },
+      setListID() {
+        this.store.currentListID = parseInt(this.id)
       },
     },
   }
@@ -46,16 +56,20 @@
 <style>
 
   .todo-header {
-    grid-area: app-header;
     align-self: stretch;
   }
+  .main-todo-area {
+    position: relative;
+  }
   .list-area {
-    grid-area: app-main / app-main / app-main / app-main-right;
   }
   .task-form {
-    grid-area: app-main-right;
     height: auto;
     box-shadow: 0px 0px 50px 2px black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 5px;
   }
 
 </style>

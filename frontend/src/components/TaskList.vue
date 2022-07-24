@@ -1,9 +1,26 @@
+
+<template>
+  
+  <TransitionGroup name="task-list" tag="div">
+    <div v-for="task in tasks"  class="list-group" :key="task">
+
+      <TaskTile class="list-group-item"
+        :name="task.name"
+        :description="task.description"
+        :dueDate="task.trueDueDate"
+        @remove-item='deleteTask(task)'
+        @task-completed='sendTaskCompletion(task)'
+      />
+
+    </div>
+  </TransitionGroup>
+
+</template>
+
 <script>
 
   import TaskTile from './TaskTile.vue'
-  import ListHeader from './ListHeader.vue'
   import { computed } from 'vue'
-
   import { useTasks } from '../stores/tasks.js'
 
   export default { 
@@ -13,18 +30,17 @@
         store,
       }
     },
+    props: ["listID"],
     components: {
       TaskTile,
-      ListHeader,
     },
     data() {
       return {
-        tasks: [],
-        drag: false
+        // ...
       }
     },
     mounted() {
-      this.currentListID = this.store.currentListID
+      this.store.currentListID = parseInt(this.listID)
     },
     methods: {
 
@@ -34,29 +50,20 @@
         this.store.deleteTask(task.id)
       },
       sendTaskCompletion(task_id) {
-        const i = this.store.tasks.indexOf(task)
+        const i = this.store.tasks.indexOf(task_id)
         this.store.tasks[i].completed = true
         this.store.completeTask(task.id)
       },
-    }
+    },
+    computed: {
+      tasks() {
+        return this.store.filteredTasks
+      }
+    },
   }
+
 </script>
 
-<template>
-  
-  <TransitionGroup name="task-list" tag="div">
-    <div v-for="task in store.filteredTasks"  class="list-group" :key="task">
-      <TaskTile class="list-group-item"
-        :name="task.name"
-        :description="task.description"
-        :dueDate="task.trueDueDate"
-        @remove-item='deleteTask(task)'
-        @task-completed='sendTaskCompletion(task)'
-      />
-    </div>
-  </TransitionGroup>
-
-</template>
 
 <style>
   
@@ -76,7 +83,6 @@
   .task-list-leave-to {
     opacity: 0;
   }
-
   .list-group {
     display: flex;
     flex-flow: column nowrap;

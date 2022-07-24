@@ -14,7 +14,7 @@
   export default {
     data() {
       return {
-        title: "Flax"
+        title: "Flax",
       }
     },
     created () {
@@ -23,7 +23,7 @@
       this.axios.get("auth/login")
 	      .then((res) => {
           if (res.data["activeSession"]) {
-            this.$router.push('/app/todo')
+            this.$router.push("/app")
           }
           else {
             this.$router.push('/login')
@@ -34,13 +34,10 @@
 
 </script>
 
-
 <style>
 
   .wrapper {
-
     height: 100vh;
-  
   }
 
 </style>

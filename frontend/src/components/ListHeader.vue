@@ -1,6 +1,5 @@
 <template>
 
- <div>
   <div class="list-header">
     <div class="col-header"> Name </div>
     <div class="col-header"> Description </div>
@@ -14,10 +13,8 @@
       </SymbolButton>
     </div>
   </div>
- </div>
 
 </template>
-
 
 <script>
 
@@ -68,6 +65,7 @@
     border: 1px solid black;
     background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
     box-shadow: 0 4px 8px -7px black;
+    height: 2.5em;
   }
   .col-header {
     display: flex;

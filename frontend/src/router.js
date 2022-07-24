@@ -17,12 +17,16 @@ const routes = [
     children: [
       // Children are rendered inside App's <router-view>
       {
-        path: 'calendar',
+        path: 'calendar/:calView',
+        name: 'calendar',
         component: Calendar,
+        props: true
       },
       {
-        path: 'todo',
+        path: 'todo/:id',
+        name: 'todo',
         component: TodoList,
+        props: true,
       },
     ]
   },

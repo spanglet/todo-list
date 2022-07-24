@@ -33,7 +33,7 @@
           notify: false,
           changedItem: ""
         },
-        lists: {},
+        lists: [],
       }
     },
     beforeMount() {
@@ -41,7 +41,7 @@
       this.store.fetchTasks()
     },
     mounted() {
-      this.$router.push("/app/todo")
+      this.$router.push("/app/todo/" + this.store.currentListID)
     },
     methods: {
 
@@ -51,13 +51,6 @@
           .then((res) => {
             this.lists = res.data
           })
-      },
-      changeActiveList (listID) {
-        this.store.filter = 'none'
-        this.store.currentListID = listID
-        setTimeout(() => {
-          this.store.filter = 'currentList'
-        }, 1000)
       },
       removeList (list) {
 
@@ -88,7 +81,6 @@
     </div>
     <Sidebar
       @notification='removeList'
-      @list-changed='changeActiveList'
       @lists-updated="loadLists"
       class='sidebar'
     />
@@ -104,12 +96,10 @@
     margin: 0;
     padding: 0;
   }
-
   a {
     color: inherit;
     text-decoration: inherit;
   }
-
   .app {
     display: grid;
     grid-template-columns:

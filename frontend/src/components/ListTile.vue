@@ -36,16 +36,39 @@
 <script>
   export default {
 
-  data() {
-    return {
+    setup() {
+      const store = useTasks()
+      return {
+        store,
+      }
+    },
+    components: {
+      SymbolButton,
+    },
+    inject: ['currentLists'],
+    emits: ['viewForm','listChanged', "listRemoved"],
+    data() {
+      return {
 
+      }
     }
   }
 
-  }
 </script>
 
 
 <style>
+  .active-list {
+    background-color: hsl(var(--hue-purple),100%,var(--lgt-2));
+  }
+  .new-list-btn {
+    background: aquamarine;
+    font-size: 18pt;
+    justify-content: space-evenly;
+  }
+  .completed-list {
+    border-top: 2px solid black;
+    box-shadow: 0px -3px 9px -5px black;
+  }
 
 </style>

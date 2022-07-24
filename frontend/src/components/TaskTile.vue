@@ -103,6 +103,8 @@
     justify-content: center;
     font-size: 20px;
     flex: 2;
+    margin-left: 1em;
+    margin-right: 1em;
   }
   .button-col {
     display: flex;

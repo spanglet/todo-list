@@ -7,12 +7,10 @@
   <div class="slider-container">
     <div
       @click="onClick"
-      :style="widthStyle"
       class="slider-main"
     >
       <div
         :class=" { 'clicked-slider-mover': clicked }"
-        :style="sliderStyle"
         class="slider-mover"
       >
       </div>
@@ -44,10 +42,6 @@
     data() {
       return {
         clicked: false,
-        sliderStyle: {
-          //transform: 'none'
-        },
-        text: "Yes"
       }
     },
     methods: {

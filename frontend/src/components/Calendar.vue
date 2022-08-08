@@ -2,11 +2,8 @@
 <template>
 
   <div class='calendar-main'>
-
     <CalendarMonth v-if="calView == 'month'"/>
-    <div v-else>
-      <CalendarWeek />
-    </div>
+    <CalendarWeek v-else />
   </div>
 
 </template>
@@ -42,5 +39,9 @@
 </script>
 
 <style>
+
+  .calendar-main {
+    padding: 5px;
+  }
 
 </style>

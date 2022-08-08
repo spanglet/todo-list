@@ -62,9 +62,11 @@
     color: white;
     position: relative;
     box-shadow: 0 4px 8px -7px black;
+    z-index: 2;
   }
   .app-header > * {
-   flex: 1;
+    flex: 1;
+    z-index: 2;
   }
   .header-title {
     display: flex;

@@ -3,7 +3,7 @@
 
   <div class="sidebar-tile">
 
-    <div class="sidebar-tile-header" @click="expand">
+    <div class="sidebar-tile-header sidebar-tile-item" @click="expand">
       {{ text }}
       <font-awesome-icon :icon="dropdownIcon" /> 
     </div>
@@ -12,7 +12,7 @@
       <div class="sidebar-expanded-group" v-if="expanded">
 
         <div 
-          class="sidebar-expanded-item"
+          class="sidebar-expanded-item sidebar-tile-item"
           v-for="route in routes"
           :key="route.id"
           :class="{ 'active-route': isActiveRoute(route.id) }"
@@ -54,6 +54,9 @@
       dropdownIcon() {
         return this.expanded ? 'angle-up' : 'angle-down'
       },
+      basePath() {
+        return '/app/' + this.path
+      },
     },
     methods: {
       // Expand or shrink when title is clicked
@@ -61,12 +64,12 @@
         this.expanded = !this.expanded
       },
       // Emit the list change to the root (App) component for handling
-      isActiveRoute (route) {
-        return false
-      },
       routeTo(id) {
-        this.$router.push("/app/" + this.path + id.toString() )
-      }
+        this.$router.push(this.basePath + id.toString() )
+      },
+      isActiveRoute (id) {
+        return this.$route.path === (this.basePath + id)
+      },
     }
   }
 
@@ -79,19 +82,16 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
-    margin: 5px;
     gap: 10px;
   }
   .sidebar-tile-header {
     display: flex;
-    font-size: 1.8em;
+    font-size: 1.75em;
     justify-content: space-between;
+    align-items: center;
     height: 30px;
-    box-shadow: 0px 3px 9px -8px black;
+    box-shadow: 0px 3px 5px 1px black;
     padding: 5px;
-  }
-  .sidebar-tile-header:hover {
-    background: hsl(var(--hue-purple),100%,var(--lgt-2));
   }
   .sidebar-expanded-group {
     display: flex;
@@ -104,8 +104,11 @@
     align-items: center;
     height: 25px;
     font-size: 16pt;
+    border-radius: 2px;
     text-align: left;
     flex: 1;
+    padding: 5px;
+    border-bottom: 1px solid #3c0e97;
   }
   .v-enter-active,
   .v-leave-active {
@@ -115,11 +118,11 @@
   .v-enter-from {
     opacity: 0;
   }
-  .expanded-content:hover {
-    background-color: grey;
-  }
-  .active-list {
+  .active-route {
     background-color: hsl(var(--hue-purple),100%,var(--lgt-2));
+  }
+  .sidebar-tile-item:hover {
+    background: hsl(var(--hue-purple),100%,var(--lgt-2));
   }
 
 </style>

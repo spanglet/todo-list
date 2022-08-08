@@ -3,7 +3,7 @@
   <div class="todo-main">
     <ListHeader class="todo-header" />
     <div class="main-todo-area">
-      <TaskList class="list-area" :listID="id" />
+      <TaskList :listID="id" />
       <TaskForm
         @submitted="setFormVisibility(false)"
         class="task-form"
@@ -60,8 +60,7 @@
   }
   .main-todo-area {
     position: relative;
-  }
-  .list-area {
+    margin: 5px;
   }
   .task-form {
     height: auto;

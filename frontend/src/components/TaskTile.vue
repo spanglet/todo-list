@@ -3,10 +3,10 @@
     <div class="col">
       {{name}}
     </div>  
-    <div class="col description-col">
+   <div class="col description-col">
       <p class="tile-text"> {{description}} </p>
     </div>  
-    <div class="col">
+    <div class="col date-col">
       {{formattedDueDate}}
     </div>  
     <div class="button-col">
@@ -82,7 +82,7 @@
     margin: 0;
     list-style: none;
     border: 2px #b378cc outset;
-    border-radius: 8px;
+    border-radius: 7px;
     background: #bb8fce;
     gap: 5px;
     height: 3em;
@@ -103,8 +103,9 @@
     justify-content: center;
     font-size: 20px;
     flex: 2;
-    margin-left: 1em;
-    margin-right: 1em;
+    padding-left: .5em;
+    padding-right: .5em;
+    border-right: 1px black solid;
   }
   .button-col {
     display: flex;
@@ -130,6 +131,9 @@
   }
   .done-button {
     background: lightgreen;
+  }
+  .date-col {
+    flex: 1;
   }
 
 </style>

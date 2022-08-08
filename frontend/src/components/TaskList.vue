@@ -1,8 +1,8 @@
 
 <template>
   
-  <TransitionGroup name="task-list" tag="div">
-    <div v-for="task in tasks"  class="list-group" :key="task">
+  <TransitionGroup name="task-list" class="list-group" tag="div">
+    <div v-for="task in tasks" :key="task">
 
       <TaskTile class="list-group-item"
         :name="task.name"
@@ -70,6 +70,7 @@
   .task-list {
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
     min-width: 0;
+    
   }
   .task-list-move,
   .task-list-enter-active,
@@ -87,7 +88,6 @@
     display: flex;
     flex-flow: column nowrap;
     gap: 3px;
-    margin: .5em;
     position: relative;
   }
   .list-group-item {

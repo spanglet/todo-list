@@ -3,7 +3,7 @@
   <div class="list-header">
     <div class="col-header"> Name </div>
     <div class="col-header"> Description </div>
-    <div class="col-header"> Due Date </div>
+    <div class="col-header date-col"> Due Date </div>
     <div class="button-col">
       <SymbolButton
         :icons="buttonIcons"
@@ -73,7 +73,10 @@
     text-align: center;
     align-items: center;
     justify-content: center;
-    border-left: 2px solid black;
+    border-right: 2px solid black;
+  }
+  .date-col {
+    flex: 1;
   }
 
 </style>

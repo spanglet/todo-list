@@ -59,9 +59,10 @@
         //notify user of action for 3 seconds
         this.notification.notify = true
         this.notification.changedItem = list
-        setTimeout(function() { console.log("Timout completed")
+        setTimeout(function() {
+          console.log("Timout completed")
+          this.notification.notify = false
         }, 3000)
-        this.notification.notify = false
       },
       setFormVisibility(visible) {
         this.store.taskFormActive = visible
@@ -106,11 +107,10 @@
       minmax(120px, 2fr)
       minmax(400px, 8fr)
       minmax(300px, 4fr)
-      minmax(20px, 1fr);
+      minmax(20px, .8fr);
     grid-template-rows:
-      minmax(60px, 2fr)
       minmax(60px, 1fr)
-      minmax(450px, 15fr)
+      minmax(450px, 14fr)
       minmax(80px, 2fr);
     grid-template-areas:
       "header header header header"
@@ -124,6 +124,8 @@
   .app-main {
     grid-area: app-header / app-main / app-main / app-main-right;
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
+    padding: 5px;
+    z-index: 1;
   }
   .header {
     grid-area: header;

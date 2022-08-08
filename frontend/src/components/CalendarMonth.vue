@@ -2,7 +2,7 @@
 <template>
   
   <div class="cal-month">
-    <div class='cal-header' v-for="dayName in daysInWeek">
+    <div class='cal-month-header cal-header' v-for="dayName in daysInWeek">
       {{ dayName }} 
     </div>
     <div v-for="i in startDay" class="inactive-day">
@@ -40,6 +40,9 @@
       startDay() {
         return (new Date(this.year, this.month, 1)).getDay()
       },
+      getLastMonthEnd() {
+        new Date(this.year, this.month - 1, 0) 
+      },
     }
   }
 
@@ -52,8 +55,8 @@
     grid-template-columns:
       repeat(7, minmax(60px, 1fr)) [col-end];
     grid-template-rows:
-      minmax(25px, 1fr) 
-      repeat(5, minmax(60px, 1fr)) [row-end];
+      minmax(30px, 60px) 
+      repeat(5, minmax(100px, 1fr)) [row-end];
     height: 100%;  
     font-size: 1.5em;
     font-weight: bold;
@@ -66,6 +69,9 @@
   .inactive-day {
     background-color: lightgrey;
     opacity: .3;
+  }
+  .cal-month-header {
+     
   }
 
 </style>

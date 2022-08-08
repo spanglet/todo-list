@@ -60,7 +60,8 @@ def register():
     except ValidationError as err:
         return err.messages,422
 
-    except IntegrityError:
+    except IntegrityError as err:
+        print(err)
         return "Username already exists",409
 
     except DBAPIError as e:

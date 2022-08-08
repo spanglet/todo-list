@@ -74,10 +74,6 @@
 
 <style>
 
-  @media (max-width: 1200px) {
-    font-size:
-  }
-
   .sidebar {
     display: flex;
     background: hsl(var(--hue-purple),100%,var(--lgt-3));

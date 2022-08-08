@@ -19,7 +19,7 @@
 
 <script>
 
-  import TaskTile from './TaskTile.vue'
+  import TaskTile from './TaskTile-Dev.vue'
   import { computed } from 'vue'
   import { useTasks } from '../stores/tasks.js'
 
@@ -39,9 +39,6 @@
         // ...
       }
     },
-    mounted() {
-      this.store.currentListID = parseInt(this.listID)
-    },
     methods: {
 
       deleteTask(task) {
@@ -49,8 +46,8 @@
         this.store.tasks.splice(i, 1);
         this.store.deleteTask(task.id)
       },
-      sendTaskCompletion(task_id) {
-        const i = this.store.tasks.indexOf(task_id)
+      sendTaskCompletion(task) {
+        const i = this.store.tasks.indexOf(task)
         this.store.tasks[i].completed = true
         this.store.completeTask(task.id)
       },
@@ -70,7 +67,9 @@
   .task-list {
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
     min-width: 0;
-    
+  }
+  .task-list > * {
+    margin: 0 
   }
   .task-list-move,
   .task-list-enter-active,
@@ -78,7 +77,7 @@
     transition: all 0.5s ease;
   }
   .task-list-leave-active {
-    position: absolute;
+    position: relative;
   }
   .task-list-enter-from,
   .task-list-leave-to {

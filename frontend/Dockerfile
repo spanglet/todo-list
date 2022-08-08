@@ -6,7 +6,6 @@ COPY package*.json ./
 
 RUN npm create vite@latest
 
-
 RUN npm install
 
 COPY . .

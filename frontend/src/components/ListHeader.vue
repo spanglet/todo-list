@@ -1,8 +1,7 @@
 <template>
 
   <div class="list-header">
-    <div class="col-header"> Name </div>
-    <div class="col-header"> Description </div>
+    <div class="col-header"> Task Name </div>
     <div class="col-header date-col"> Due Date </div>
     <div class="button-col">
       <SymbolButton
@@ -69,7 +68,7 @@
   }
   .col-header {
     display: flex;
-    flex: 2;
+    flex: 4;
     text-align: center;
     align-items: center;
     justify-content: center;

@@ -18,13 +18,17 @@
   import ListHeader from './ListHeader.vue'
   import TaskList from './TaskList.vue'
   import TaskForm from './TaskForm.vue'
+
   import { useTasks } from '../stores/tasks.js'
+  import { useLists } from '../stores/lists.js'
 
   export default {
     setup() {
       const store = useTasks()
+      const listStore = useLists()
       return {
         store,
+        listStore
       }
     },
     components: {
@@ -46,7 +50,13 @@
         this.store.taskFormActive = visible
       },
       setListID() {
-        this.store.currentListID = parseInt(this.id)
+        if (this.id === "completed") {
+          this.store.filter = "completed"
+        }
+        else {
+          this.store.filter = "currentList"
+          this.listStore.currentListID = parseInt(this.id)
+        }
       },
     },
   }

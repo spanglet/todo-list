@@ -4,12 +4,12 @@
   <div class="sidebar-tile">
 
     <div class="sidebar-tile-header sidebar-tile-item" @click="expand">
-      {{ text }}
-      <font-awesome-icon :icon="dropdownIcon" /> 
+      {{ name }}
+      <font-awesome-icon :icon="dropdownIcon" v-if="routes"/> 
     </div>
 
     <TransitionGroup>
-      <div class="sidebar-expanded-group" v-if="expanded">
+      <div class="sidebar-expanded-group" v-if="expanded && routes">
 
         <div 
           class="sidebar-expanded-item sidebar-tile-item"
@@ -18,17 +18,22 @@
           :class="{ 'active-route': isActiveRoute(route.id) }"
           @click="routeTo(route.id)"
         >
-          {{ route.name }}
+          <div>
+            {{ route.name }}
+          </div>
+          <slot name='sidebar-tile-button' @click='onClick(route.id)'/>
+        </div>
+        
+        <div v-if="hasFooter" class="sidebar-expanded-item footer-item">
+          <slot name='sidebar-tile-footer' /> 
         </div>
 
-        <slot name="footer-slot"/>
       </div>
     </TransitionGroup>
 
   </div>
 
 </template>
-
 
 <script>
 
@@ -41,13 +46,23 @@
         store,
       }
     },
-    components: {
-       
+    emit: ['clicked'],
+    props: {
+      name: {
+        type: String,
+        required: true
+      },
+      path: {
+        type: String,
+        required: true
+      },
+      routes: Array,
+      footer: Boolean,
     },
-    props: ["text","path","routes"],
     data() {
       return {
         expanded: false,
+        hasFooter: this.footer,
       }
     },
     computed: {
@@ -61,14 +76,22 @@
     methods: {
       // Expand or shrink when title is clicked
       expand() {
-        this.expanded = !this.expanded
+        if (this.routes) {
+          this.expanded = !this.expanded
+        }
+        else {
+          this.$router.push(this.basePath)
+        }
       },
-      // Emit the list change to the root (App) component for handling
       routeTo(id) {
         this.$router.push(this.basePath + id.toString() )
       },
-      isActiveRoute (id) {
+      isActiveRoute(id) {
         return this.$route.path === (this.basePath + id)
+      },
+      onClick(id) {
+        alert("the button was clicked")
+        this.$emit('clicked',id)
       },
     }
   }
@@ -96,19 +119,24 @@
   .sidebar-expanded-group {
     display: flex;
     flex-flow: column nowrap;
-    gap: 5px;
+    gap: 1px;
   }
   .sidebar-expanded-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 25px;
-    font-size: 16pt;
+    font-size: 18pt;
     border-radius: 2px;
     text-align: left;
     flex: 1;
     padding: 5px;
     border-bottom: 1px solid #3c0e97;
+  }
+  .footer-item {
+    border: 4px dashed black;
+    background: green;
+    border-radius: 12px;
   }
   .v-enter-active,
   .v-leave-active {
@@ -123,6 +151,10 @@
   }
   .sidebar-tile-item:hover {
     background: hsl(var(--hue-purple),100%,var(--lgt-2));
+  }
+  .sidebar-tile-item {
+    display: flex;
+    justify-content: space-between; 
   }
 
 </style>

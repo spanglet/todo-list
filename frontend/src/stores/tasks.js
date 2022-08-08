@@ -1,15 +1,18 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { axios } from "../axios.js"
+import { useLists } from "./lists.js"
 
 export const useTasks = defineStore('tasks', {
   state: () => ({
     tasks: [],
     /** @type {'all' | 'completed' | 'incomplete' | 'currentList' | 'none'} */
     filter: 'currentList',
-    currentListID: 1,
     taskFormActive: false,
   }),
   getters: {
+    currentListID(state) {
+      return useLists().currentList
+    },
     completedTasks(state) {
       return state.tasks.filter((task) => task.completed)
     },
@@ -17,7 +20,7 @@ export const useTasks = defineStore('tasks', {
       return state.tasks.filter((task) => !task.completed)
     },
     currentListTasks(state) {
-      return state.tasks.filter((task) => task.listID == this.currentListID)
+      return state.tasks.filter((task) => task.listID == this.currentListID && !task.completed)
     },
     /**
      * @returns {{ text: string, id: number, isFinished: boolean }[]}

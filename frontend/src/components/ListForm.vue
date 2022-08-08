@@ -1,17 +1,30 @@
 
 <template>
-  <div class="list-form">
-    <label for="list-name"> List Name </label>
-    <input
-      v-model="name"
-      id="list-name"
-      type="text"
-      placeholder="Name"
-    >
-    <SymbolButton
-      :icons="submitIcon"
-      @click="createList"
-    />
+  <div class="list-form" @click="showForm = true">
+    <div class="list-form-header" v-if="!showForm">
+      <div>
+        New List
+      </div>
+      <font-awesome-icon class="icon" icon="plus" />
+    </div>
+    <div class="list-form-body" v-else>
+    <!-- <label for="list-name"> List Name </label> -->
+      <input
+        v-model="name"
+        id="list-name"
+        type="text"
+      >
+      <SymbolButton
+        :icons="submitIcon"
+        @click.stop="createList"
+        class='form-submit-button'
+      />
+      <SymbolButton
+        :icons="cancelIcon"
+        @click.stop="hideForm"
+        class='form-cancel-button'
+      />
+    </div>
   </div>
 
 </template>
@@ -34,11 +47,15 @@
     data() {
       return {
         submitIcon: ["check"],
+        cancelIcon: ["xmark"],
         showForm: false,
         name: "",
       }
     },
     methods: {
+      hideForm: function () {
+        this.showForm = false
+      },
       // Creates a new list for user
       createList: function () {
 
@@ -49,17 +66,41 @@
             // Emit to parent container so list is updated
             if (res.status == 200) {
               this.$emit("listsUpdated")
-              this.showForm = !this.showForm
+              this.hideForm()
             }
           })
       },
-    }
+    },
   }
 
 </script>
 
 <style>
-
-
-
+  .list-form {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: .5em;
+    width: 100%;
+  }
+  .list-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .list-form input {
+    font-size: 18pt;
+    width: 100%;
+  }
+  .list-form-body {
+    display: flex;
+    gap: 2px;
+  }
+  .form-submit-button {
+    flex: 1;
+  }
+  .form-cancel-button {
+    flex: 1;
+  }
 </style>

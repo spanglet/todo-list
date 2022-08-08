@@ -3,21 +3,34 @@
   <div class="sidebar">
 
     <SidebarTile
-      text="Lists"
+      name="Lists"
+      @clicked="removeList"
       path='todo/'
       :routes="currentLists"
-      @list-removed="removeList"
-      @list-changed="changeList"
+      footer
     >
 
-      <ListForm />
+      <template #sidebar-tile-button>
+        <SymbolButton 
+          :icons="icons"
+        />
+      </template>
+
+      <template #sidebar-tile-footer>
+        <ListForm />
+      </template>
 
     </SidebarTile>
 
     <SidebarTile
-      text="Calendar"
+      name="Calendar"
       path="calendar/"
       :routes="calendarRoutes"
+    />
+
+    <SidebarTile
+      name="Completed Tasks"
+      path="todo/completed"
     />
 
   </div>
@@ -27,11 +40,13 @@
 
   import SidebarTile from "./SidebarTile.vue"
   import ListForm from "./ListForm.vue"
+  import SymbolButton from "./SymbolButton.vue"
 
   export default {
     components: {
-      SidebarTile,
       ListForm,
+      SidebarTile,
+      SymbolButton,
     },
     inject: ['currentLists'],
     emits: [
@@ -48,22 +63,19 @@
           { name: "Week",
             id: "week"
           },
-        ]
+        ],
+        icons: ["xmark"]
       }
     },
     methods: {
-      changeList: function (list) {
-        /* Change current list view at App component
-         */
-        this.$emit("listChanged", list)
-      },
-      removeList: function (list) {
+      removeList: function (list_id) {
         /* Send delete request for list to backend
          */
-        this.axios.delete("lists/" + String(list.id))
+        alert("test Sidebar.vue")
+        this.axios.delete("lists/" + String(list_id))
           .then((res) => {
             if (res.status == 200) {
-              this.$emit("notification",list.name)
+              this.$emit("notification",list_id)
             }
           })
       },
@@ -82,17 +94,6 @@
     align-items: stretch;
     margin: 8px;
     gap: 3px;
-  }
-  .list-form {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    align-items: stretch;
-    gap: .5em;
-    margin: 3px;
-  }
-  .list-form input {
-    font-size: 18pt;
   }
 
 </style>

@@ -4,62 +4,43 @@ import { axios } from "../axios.js"
 
 export const useLists = defineStore('lists', {
   state: () => ({
-    lists: [],
+    _lists: [],
     /** @type {'all' | 'completed' | 'incomplete' | 'currentList'} */
     //filter: 'currentList',
-    currentListID: 1,
+    currentListID: 0,
   }),
   getters: {
-    completedTasks(state) {
-      return state.tasks.filter((task) => task.completed)
-    },
-    incompleteTasks(state) {
-      return state.tasks.filter((task) => !task.completed)
-    },
-    currentListTasks(state) {
-      return state.tasks.filter((task) => task.listID == this.currentListID)
+    currentList(state) {
+      return state.currentListID
     },
     /**
      * @returns {{ text: string, id: number, isFinished: boolean }[]}
      */
-    filteredTasks(state) {
-      if (this.filter === 'completed') {
-        return this.completedTasks
-      }
-      else if (this.filter === 'incomplete') {
-        return this.incompleteTasks
-      }
-      else if (this.filter === 'currentList') {
-        return this.currentListTasks
-      }
-      return this.tasks
+    lists(state) {
+      return this._lists
     },
   },
   actions: {
-    async fetchTasks() {
+    async fetchLists() {
       try {
-        var resp = await axios.get("tasks/")
-        this.tasks = resp.data
+        var resp = await axios.get("lists/")
+        this._lists = resp.data
+        if (this.currentListID == 0) {
+          this.currentListID = this._lists[0].id
+        }
       }
       catch (error) {
         console.log(error)
       }
     },
-    async deleteTask(task_id) {
-      // DELETE request to remove task from db
-      var targetPath = "tasks/" + String(task_id)
+    async deleteList(list_id) {
+      var targetPath = "lists/" + String(list_id)
       var response = await axios.delete(targetPath)
-      this.fetchTasks()
+      this.fetchLists()
     },
-    async addTask(data) {
-      var response = await axios.post('tasks/', data)
-      this.fetchTasks()
-    },
-    async completeTask(task_id) {
-      await axios.put("tasks/" + task_id, {
-         'completed': true
-      })
-      this.fetchTasks() 
+    async addList(data) {
+      var response = await axios.post('lists/', data)
+      this.fetchLists()
     },
   }
 })

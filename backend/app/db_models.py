@@ -23,7 +23,7 @@ class Task(db.Model):
     listID = db.Column(
         db.Integer,
         db.ForeignKey('list.id'),
-        nullable=False
+        nullable = False
     )
     categoryID = db.Column(
         db.Integer,
@@ -31,11 +31,9 @@ class Task(db.Model):
     )
     completed = db.Column(
         db.Boolean,
-        default = False
+        default = False,
+        nullable = False
     )
-
-    #dependantsID INTEGER REFERENCES Tasks(id),
-    #preferredDueDate DATETIME,
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)

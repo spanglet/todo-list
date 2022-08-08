@@ -60,11 +60,6 @@ def update_task(task_id):
         
         data = request.get_json()
 
-        if "completed" in data:
-
-            data["listID"] = -1
-
-
         task = Task.query.get(task_id)
        
         # Update Task object that was retrieved

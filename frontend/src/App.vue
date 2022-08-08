@@ -6,13 +6,16 @@
   import { computed } from 'vue'
 
   import { useTasks } from './stores/tasks.js'
+  import { useLists } from './stores/lists.js'
 
   export default { 
 
     setup() {
       const store = useTasks()
+      const listStore = useLists()
       return {
         store,
+        listStore,
       }
     },
     components: {
@@ -22,7 +25,7 @@
     },
     provide() {
       return {
-        currentLists: computed(() => this.lists),
+        currentLists: computed(() => this.listStore.lists),
       }
     },
     data() {
@@ -38,7 +41,7 @@
     },
     beforeMount() {
       this.loadLists()
-      this.store.fetchTasks()
+      this.loadTasks()
     },
     mounted() {
       this.$router.push("/app/todo/" + this.store.currentListID)
@@ -46,23 +49,13 @@
     methods: {
 
       loadLists() {
-        // GET request to Flask backend for list
-        this.axios.get("lists/")
-          .then((res) => {
-            this.lists = res.data
-          })
+        this.listStore.fetchLists()
       },
-      removeList (list) {
-
-        this.loadLists()
-
-        //notify user of action for 3 seconds
-        this.notification.notify = true
-        this.notification.changedItem = list
-        setTimeout(function() {
-          console.log("Timout completed")
-          this.notification.notify = false
-        }, 3000)
+      loadTasks() {
+        this.store.fetchTasks()
+      },
+      removeList(list_id) {
+        this.listStore.deleteList(list_id)
       },
       setFormVisibility(visible) {
         this.store.taskFormActive = visible
@@ -104,17 +97,16 @@
   .app {
     display: grid;
     grid-template-columns:
-      minmax(120px, 2fr)
-      minmax(400px, 8fr)
-      minmax(300px, 4fr)
-      minmax(20px, .8fr);
+      minmax(140px, 2fr)
+      minmax(400px, 5fr)
+      minmax(300px, 3fr)
+      minmax(20px, 2fr);
     grid-template-rows:
-      minmax(60px, 1fr)
-      minmax(450px, 14fr)
-      minmax(80px, 2fr);
+      minmax(80px, 1fr)
+      minmax(450px, 13fr)
+      minmax(80px, 1fr);
     grid-template-areas:
       "header header header header"
-      "sidebar app-header app-header edge"
       "sidebar app-main app-main-right edge"
       "footer footer footer footer";
     height: 100vh;
@@ -122,7 +114,7 @@
     font-family: Helvetica, sans-serif;
   } 
   .app-main {
-    grid-area: app-header / app-main / app-main / app-main-right;
+    grid-area: app-main / app-main / app-main / app-main-right;
     background: hsl(var(--hue-purple), 100%, var(--lgt-6));
     padding: 5px;
     z-index: 1;

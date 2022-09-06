@@ -20,9 +20,11 @@
         />
       </div>  
     </div>  
-    <div v-if="isExpanded" class="task-description">
-      <p class="tile-text"> {{description}} </p>
-    </div>  
+    <Transition name="description">
+      <div v-show="isExpanded" class="task-description">
+        <p class="tile-text"> {{description}} </p>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -81,7 +83,6 @@
     border-radius: 7px;
     background: #bb8fce;
     padding: 5px;
-    transition: all 1s;
   }
   .task-row {
     display: flex;
@@ -104,7 +105,21 @@
   }
   .task-description {
     border-top: 1px solid black;
-    font-size: 1em;
+    font-size: 1.2em;
+    padding: 5px;
+    transition: all 1s;
+  }
+  .description-enter-active,
+  .description-leave-active {
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
+  .description-enter-from,
+  .description-leave-to {
+    height: 0px;
+    border-width: 0px;
+    padding: 0px;
+    opacity: 0;
   }
 
 </style>

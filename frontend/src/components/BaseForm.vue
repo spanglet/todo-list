@@ -128,7 +128,7 @@
         this.$emit('closed')
       },
       closeForm() {
-        this.$emit('closed')
+        this.store.taskFormActive = false
       }
     }
   }      

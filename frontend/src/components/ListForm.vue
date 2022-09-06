@@ -29,19 +29,23 @@
 
 </template>
 
-
 <script>
 
   import SidebarTile from "./SidebarTile.vue"
   import SymbolButton from "./SymbolButton.vue"
+  import { useLists } from '../stores/lists.js'
 
   export default {
+    setup() {
+      const store = useLists()
+      return {
+        store,
+      }
+    },
     components: {
       SymbolButton,
     },
     emits: [
-      'listChanged',
-      'listsUpdated',
       'notification'
     ],
     data() {
@@ -57,18 +61,9 @@
         this.showForm = false
       },
       // Creates a new list for user
-      createList: function () {
-
-        this.axios.post("lists/", {
-            "name": this.name
-          })
-          .then((res) => { 
-            // Emit to parent container so list is updated
-            if (res.status == 200) {
-              this.$emit("listsUpdated")
-              this.hideForm()
-            }
-          })
+      createList: function() {
+        this.store.addList(this.name)
+        this.hideForm()
       },
     },
   }

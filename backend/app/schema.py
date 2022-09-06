@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 class UserSchema(Schema):
     """Schema for User JSON post/put data validation"""
@@ -7,7 +7,10 @@ class UserSchema(Schema):
 
 class ListSchema(Schema):
     """Schema for List JSON post/put data validation"""
-    name = fields.Str(required=True)
+    name = fields.Str(
+      required = True,
+      validate = validate.Length(min=2,max=16)
+    )
     description = fields.Str()
     id = fields.Integer()
 

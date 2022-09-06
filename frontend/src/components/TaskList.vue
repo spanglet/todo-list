@@ -1,7 +1,7 @@
 
 <template>
   
-  <TransitionGroup name="task-list" class="list-group" tag="div">
+  <TransitionGroup name="task-list" class="list-group">
     <div v-for="task in tasks" :key="task">
 
       <TaskTile class="list-group-item"
@@ -90,7 +90,6 @@
     position: relative;
   }
   .list-group-item {
-    width: 100%;
   }
 
 </style>

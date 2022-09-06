@@ -1,12 +1,9 @@
 import { defineStore } from 'pinia'
 import { axios } from "../axios.js"
 
-
 export const useLists = defineStore('lists', {
   state: () => ({
     _lists: [],
-    /** @type {'all' | 'completed' | 'incomplete' | 'currentList'} */
-    //filter: 'currentList',
     currentListID: 0,
   }),
   getters: {
@@ -38,9 +35,11 @@ export const useLists = defineStore('lists', {
       var response = await axios.delete(targetPath)
       this.fetchLists()
     },
-    async addList(data) {
-      var response = await axios.post('lists/', data)
-      this.fetchLists()
+    async addList(list_name) {
+        var results = await axios.post("lists/", {
+            "name": list_name
+          })
+        this.fetchLists()
     },
   }
 })

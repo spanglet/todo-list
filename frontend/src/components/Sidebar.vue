@@ -8,10 +8,11 @@
       path='todo/'
       :routes="currentLists"
       footer
+      tile-button
     >
 
       <template #sidebar-tile-button>
-        <SymbolButton 
+        <SymbolButton
           :icons="icons"
         />
       </template>
@@ -41,8 +42,15 @@
   import SidebarTile from "./SidebarTile.vue"
   import ListForm from "./ListForm.vue"
   import SymbolButton from "./SymbolButton.vue"
+  import { useLists } from '../stores/lists.js'
 
   export default {
+    setup() {
+      const store = useLists()
+      return {
+        store,
+      }
+    },
     components: {
       ListForm,
       SidebarTile,
@@ -71,13 +79,7 @@
       removeList: function (list_id) {
         /* Send delete request for list to backend
          */
-        alert("test Sidebar.vue")
-        this.axios.delete("lists/" + String(list_id))
-          .then((res) => {
-            if (res.status == 200) {
-              this.$emit("notification",list_id)
-            }
-          })
+        this.store.deleteList(list_id)
       },
     }      
   }

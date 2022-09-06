@@ -21,7 +21,12 @@
           <div>
             {{ route.name }}
           </div>
-          <slot name='sidebar-tile-button' @click='onClick(route.id)'/>
+          <div
+            v-if='hasButton'
+            @click.stop='onClick(route.id)'
+          >
+            <slot name='sidebar-tile-button' />
+          </div>
         </div>
         
         <div v-if="hasFooter" class="sidebar-expanded-item footer-item">
@@ -58,11 +63,13 @@
       },
       routes: Array,
       footer: Boolean,
+      tileButton: Boolean,
     },
     data() {
       return {
         expanded: false,
         hasFooter: this.footer,
+        hasButton: this.footer,
       }
     },
     computed: {
@@ -90,7 +97,6 @@
         return this.$route.path === (this.basePath + id)
       },
       onClick(id) {
-        alert("the button was clicked")
         this.$emit('clicked',id)
       },
     }

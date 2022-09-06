@@ -7,6 +7,7 @@
       <SymbolButton
         :icons="buttonIcons"
         @click.stop="changeFormVisibility"
+        class="list-header-button"
       >
         New Task
       </SymbolButton>
@@ -73,6 +74,16 @@
     align-items: center;
     justify-content: center;
     border-right: 2px solid black;
+  }
+  .button-col {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    justify-content: center;
+  }
+  .list-header-button {
+    display: flex;
+    justify-content: space-between;
   }
   .date-col {
     flex: 1;

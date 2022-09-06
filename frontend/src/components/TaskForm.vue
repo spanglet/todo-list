@@ -7,7 +7,6 @@
 
 </template>
 
-
 <script>
 
   import BaseForm from "./BaseForm.vue"

@@ -1,15 +1,23 @@
-# Flax
+# To-Do App
 
-This app is going to be a to-do app eventually
+This project runs a single-page application To-Do list, with a separate front- and back-end.
 
+The frontend was created using the Vue.js (v3) Javascript framework. The frontend consumes the
+API of the backend, which runs on the Python-base Flask web framework. Persistent storage of data
+is held in a MySQL database, which the backend performs operations on and sends to the frontend via
+its API in JSON-format.
 
-*Frontend:*
+## Run the App Locally
 
- - Vue.js (v3), built using Vite 
+The To-Do App is run using docker-compose, which creates three containers (mySQL database, Flask backend, Vue.js fronted).
 
-*Backend:*
+Once the repository is pulled, run the following to build and run the Docker containers:
 
- - Flask (Python framework)
- - Database in MySQL
+```
+$ docker-compose up --build
 
-Eventually Redis will be deployed for caching session data
+```
+By default, the website is accessible locally at *127.0.0.1:3000*, assuming port 3000 is not in use
+
+The backend container is rooted at *127.0.0.1:5000*.
+

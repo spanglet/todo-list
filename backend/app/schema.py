@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields, validate, validates_schema
 
 class UserSchema(Schema):
     """Schema for User JSON post/put data validation"""
@@ -22,3 +22,4 @@ class TaskSchema(Schema):
     listID = fields.Int()
     priority = fields.Str()
     id = fields.Int()
+

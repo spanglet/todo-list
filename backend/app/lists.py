@@ -5,16 +5,8 @@ from marshmallow import Schema, fields
 from marshmallow.exceptions import ValidationError
 
 from .db_models import db, List, Task
-from .schema import TaskSchema
+from .schema import TaskSchema, ListSchema
 from .auth import login_required
-
-# Schema for JSON post/put data validation
-class ListSchema(Schema):
-    name = fields.Str(required=True)
-    description = fields.Str()
-    id = fields.Integer()
-
-app = Flask(__name__)
 
 bp = Blueprint('lists', __name__, url_prefix='/lists')
 
@@ -31,17 +23,11 @@ def new_list():
             return "Data must be of type json",400
   
         # Use schema to check for incorrect request entries
-        try:
-            ListSchema().load(data)
-       
-        except ValidationError:
-            return "json contained incorrect keys",400
+        ListSchema().load(data)
        
         # Insert response data into MySQL DB
-       
         new_list = List(
             name = data["name"],
-            #description = data["description"],
             userID = session['user_id']
         )
         db.session.add(new_list)
@@ -51,17 +37,14 @@ def new_list():
  
     if request.method == 'GET':
         
-        lists = List.query.filter(List.userID == session["user_id"], List.id > -1).all()
+        lists = List.query.filter(List.userID == session["user_id"],
+                    List.id > -1).all()
 
         return ListSchema().dumps(lists, many=True), 200
  
-
-# Delete or modify individual list        
 @bp.route('/<list_id>', methods=['PUT','DELETE','GET'])
 def update_list(list_id):
-
- 
-    # Update list with data of request if PUT request
+    """Delete or modify existing list owned by requester"""
     if request.method == 'PUT':
 
         data = request.get_json()
@@ -77,7 +60,6 @@ def update_list(list_id):
         db.session.commit()
         return "List was successfully updated",200
  
-    # Remove list if DEL request received
     if request.method == 'DELETE':
         
         del_list = List.query.get(list_id)

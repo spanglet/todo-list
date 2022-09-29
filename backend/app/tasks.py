@@ -43,7 +43,7 @@ def manage_tasks():
     if request.method == 'GET':
 
         try:
-            tasks = Task.query.all() 
+            tasks = Task.query.filter(List.userID == session["user_id"]).all() 
         except:
             return "Error in querying all records from Task table", 404
 

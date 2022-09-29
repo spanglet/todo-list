@@ -72,7 +72,7 @@
     background: hsl(var(--hue-purple), 100%, var(--lgt-4));
     border: 3px solid black;
     border-radius: 10px;
-    color: white;
+    color: #efefef;
     box-shadow: 5px 6px 15px 3px gray;
   }
   .login-submit-btn {

@@ -16,8 +16,16 @@
       </div>
       <label for="username">Username</label>
       <input name="username" v-model="username" required>
+      <div class="input-warning" v-if="username.length < 4">
+        Username must contain at least 4 characters
+      </div>
+
       <label for="password">Password</label>
       <input type="password" v-model="password" name="password" required>
+      <div class="input-warning" v-if="password.length < 8">
+      	Password must contain at least 8 characters
+      </div>
+
       <button class="register-submit-btn" @click="register"> Submit </button>
     </div>
   </div>
@@ -42,11 +50,11 @@
         
         // User inputs validated to ensure correct registration request is sent
         if (this.password.length < 8) {
-          alert("Password must be at least 8 characters")
+          alert("Password must contain at least 8 characters")
           
         } 
         else if (this.username.length < 4) {
-          alert("Username must be at least 4 characters")
+          alert("Username must contain at least 4 characters")
         } 
         else {
           this.axios.post("auth/register", {
@@ -87,7 +95,8 @@
     background: hsl(var(--hue-purple), 100%, var(--lgt-4));
     border: 3px solid black;
     border-radius: 10px;
-    color: white;
+    color: #efefef;
+    box-shadow: 5px 6px 15px 3px gray;
   }
   .register-submit-btn {
     font-size: 20pt;
@@ -95,6 +104,11 @@
   .input-row {
     display: flex;
   }
+  .input-warning {
+   font-size: .8em;
+   font-weight: bold;
+   text-align: center;
+  }	
 
 </style>
 

@@ -69,11 +69,6 @@ export const useTasks = defineStore('tasks', {
       })
       this.fetchTasks() 
     },
-    async completeTask(task_id) {
-      await axios.put("tasks/" + task_id, {
-         'completed': true
-      })
-    },
     getTasksOnDate(date) {
       return this.tasks.filter((task) => task.trueDueDate === date)
     },

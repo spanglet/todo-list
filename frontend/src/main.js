@@ -11,7 +11,7 @@ import { library } from "@fortawesome/fontawesome-svg-core"
 import { faPlus,faMinus,faCheck,faXmark,
 	faAngleDown,faAngleUp} from '@fortawesome/free-solid-svg-icons'
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 
 // Icon registration
 library.add(faPlus,faMinus,faCheck,faXmark,
@@ -21,12 +21,12 @@ const pinia = createPinia()
 const app = createApp(Wrapper)
 	.component("font-awesome-icon", FontAwesomeIcon) 
 	.use(router)
-  .use(pinia)
+  	.use(pinia)
 
 app.config.globalProperties.axios = axios
 app.mount('#app')
 
-// Temporarily required to makeinjections automatically unwrap computed refs
+// Temporarily required to make injections automatically unwrap computed refs
 // Will be unnecessary by Vue 3.3
 app.config.unwrapInjectedRef = true
 

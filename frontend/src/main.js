@@ -6,11 +6,10 @@ import { createPinia } from 'pinia'
 import Wrapper from './Wrapper.vue'
 
 
-// Icon imports
+// Icon imports - Font Awesome
 import { library } from "@fortawesome/fontawesome-svg-core"
 import { faPlus,faMinus,faCheck,faXmark,
 	faAngleDown,faAngleUp} from '@fortawesome/free-solid-svg-icons'
-
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
 
 // Icon registration
@@ -24,6 +23,7 @@ const app = createApp(Wrapper)
   	.use(pinia)
 
 app.config.globalProperties.axios = axios
+app.config
 app.mount('#app')
 
 // Temporarily required to make injections automatically unwrap computed refs

@@ -5,9 +5,9 @@
     <h1>Login</h1>
     <div class="login-form">
       <label for="username">Username</label>
-      <input name="username" v-model="username" required>
+      <input name="username" v-model="form.username" required>
       <label for="password">Password</label>
-      <input type="password" v-model="password" name="password" required>
+      <input type="password" v-model="form.password" name="password" required>
       <button class="login-submit-btn" @click="authenticate"> Submit </button>
       <router-link to="/register" class="create-account-btn">
         Create a New Account
@@ -18,9 +18,29 @@
 </template>
 
 
-<script>
+<script setup>
 
-  export default {
+  import { ref } from 'vue'
+  import { useFetch } from './composables/fetch.js'
+
+  const form = $ref({
+    username:  "",
+    password:  ""
+  })
+  
+
+  function authenticate() {
+    const { data, error } = useFetch('auth/login', 'POST', form)
+    if (data['OK']) {
+      $router.push("/app")
+    }
+    else {
+      alert("Username or password is incorrect")
+    }
+  }
+
+  //------------------------
+  `export default {
     data() {
        return {
          username: "",
@@ -46,7 +66,7 @@
           })
       }
     }
-  }
+  }`
 </script>
 
 <style>

@@ -1,7 +1,0 @@
-Flask
-flask_cors
-flask-security
-Flask-SQLAlchemy
-mysql-connector-python
-marshmallow
-uuid

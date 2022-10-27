@@ -2,33 +2,33 @@ import os
 from flask import Flask
 from flask_cors import CORS
 
-from .db_models import db
+from todoism.db_models import db
+from todoism.request_handlers import register_request_handlers
 
-REINIT_DB = False
 
-def create_app(test_config=None):
+def create_app(testing=False):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
 
     # Enable CORS for frontend cross-origin requests
     # TODO transfer CORS to config file for switching between * URL and :::3000 (frontend)
-    CORS(app, resources={r'/*': {'origins': 'http://127.0.0.1:3000',
-        "supports_credentials": True}})
+    CORS(app, resources={r'/*': {
+        'origins': 'http://127.0.0.1:3000',
+        "supports_credentials": True
+    }})
 
-    # Config loaded from config.py
-    # TODO make env vars switch between testing and dev configs
-    app.config.from_pyfile("config.py")
+    # Config loaded from config.py in instance folder
+    app.config.from_pyfile("config.py", silent=True)
 
+    if testing:
+        # Update configuration for testing purposes
+        app.config.from_pyfile("test_config.py", silent=True)
 
-    try:
+    with app.app_context():
         db.init_app(app)
-        if REINIT_DB:
-            db.drop_all(app=app)
-            db.create_all(app=app) 
-    except Exception as e: 
-        print("Exception when initializing database\n")
-        print(e)
-        return
+        if testing:
+            db.drop_all()
+            db.create_all()
 
     # Ensure the instance folder exists
     try:
@@ -42,6 +42,8 @@ def create_app(test_config=None):
     app.register_blueprint(tasks.bp)
     app.register_blueprint(lists.bp)
     app.register_blueprint(error_handlers.bp)
+
+    register_request_handlers(app)
 
     """ Global 404 (Page not Found) error handler"""
     @app.errorhandler(404)

@@ -21,52 +21,27 @@
 <script setup>
 
   import { ref } from 'vue'
-  import { useFetch } from './composables/fetch.js'
+  import { useRouter } from 'vue-router'
+  import Fetch from './fetch.js'
+
+  const router = useRouter()
 
   const form = $ref({
     username:  "",
     password:  ""
   })
-  
 
-  function authenticate() {
-    const { data, error } = useFetch('auth/login', 'POST', form)
-    if (data['OK']) {
-      $router.push("/app")
+  // Sends username/password form data to backend for authentication
+  async function authenticate() {
+    const json = await Fetch.post('auth/login', form)
+    if (json.data) {
+      router.push("/app")
     }
     else {
       alert("Username or password is incorrect")
     }
   }
 
-  //------------------------
-  `export default {
-    data() {
-       return {
-         username: "",
-         password: ''
-       }
-    },
-    methods: {
-      // User info sent to Flask backend for authentication
-      authenticate() {
-
-        this.axios.post("auth/login", {
-            "username": this.username,
-            "password": this.password
-          })
-          .then((res) => { 
-            // Render application if login is successful
-            if (res.data['OK']) {
-              this.$router.push("/app")
-            }
-            else {
-              alert("Username or password is incorrect")
-            }
-          })
-      }
-    }
-  }`
 </script>
 
 <style>

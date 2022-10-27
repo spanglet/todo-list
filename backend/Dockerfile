@@ -16,10 +16,11 @@ RUN pip install --upgrade pip
 RUN pip3 install -r requirements.txt
 
 COPY . .
+RUN pip3 install .
 
 ENV FLASK_DEBUG=true
 ENV FLASK_ENV=development
 
 ENTRYPOINT ["/bin/bash"]
-CMD ["./wait-for-it.sh","-h","mysqldb","-p","3306","--","python3","-m", "flask","run","--host=0.0.0.0"]
+CMD ["./wait-for-it.sh","-h","mysqldb","-p","3306","--","python3","-m", "flask","--app=todoism" , "run","--host=0.0.0.0"]
 

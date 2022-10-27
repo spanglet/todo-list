@@ -37,11 +37,6 @@
       ListHeader,
     },
     props: ["id"],
-    data() {
-      return {
-    
-      }
-    },
     watch: {
       id: 'setListID'
     },

@@ -1,5 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
@@ -12,7 +13,7 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     description = db.Column(db.String(255))
-    trueDueDate = db.Column(
+    dueDate = db.Column(
         db.DateTime,
         default = datetime.utcnow
     )
@@ -35,14 +36,6 @@ class Task(db.Model):
         nullable = False
     )
 
-class Category(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255))
-    description = db.Column(db.String(255))
-    userID = db.Column(
-        db.BINARY(16),
-        db.ForeignKey('user.id')
-    )
 
 class List(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,4 +45,13 @@ class List(db.Model):
         db.BINARY(16),
         db.ForeignKey('user.id')
     )
+    tasks = db.relationship('Task')
 
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255))
+    description = db.Column(db.String(255))
+    userID = db.Column(
+        db.BINARY(16),
+        db.ForeignKey('user.id')
+    )

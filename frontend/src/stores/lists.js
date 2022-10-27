@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { axios } from "../axios.js"
+import Fetch from "../fetch.js"
 
+// Holds list-related data and functions across project
 export const useLists = defineStore('lists', {
   state: () => ({
     _lists: [],
@@ -10,35 +12,34 @@ export const useLists = defineStore('lists', {
     currentList(state) {
       return state.currentListID
     },
-    /**
-     * @returns {{ text: string, id: number, isFinished: boolean }[]}
-     */
     lists(state) {
       return this._lists
     },
   },
   actions: {
     async fetchLists() {
-      try {
-        var resp = await axios.get("lists/")
-        this._lists = resp.data
-        if (this.currentListID == 0) {
-          this.currentListID = this._lists[0].id
-        }
+      var json = await Fetch.get("lists/")
+      if (json.data) {
+        this._lists = json.data
       }
-      catch (error) {
-        console.log(error)
+      if (this.currentListID == 0) {
+        this.currentListID = this._lists[0].id
       }
     },
+    // Sends delete request to backend and removes from store on success
     async deleteList(list_id) {
       var targetPath = "lists/" + String(list_id)
-      var response = await axios.delete(targetPath)
+      var response = await Fetch.delete(targetPath)
+      // TODO: add returned id to list rather than refetching, for improving efficiency
       this.fetchLists()
     },
-    async addList(list_name) {
-        var results = await axios.post("lists/", {
-            "name": list_name
-          })
+    async addList(list_name, description) {
+
+	var json = {
+	  'name': list_name,
+	}
+        var results = await Fetch.post("lists/", json)
+	// TODO: add returned id to list rather than refetching, for improving efficiency
         this.fetchLists()
     },
   }

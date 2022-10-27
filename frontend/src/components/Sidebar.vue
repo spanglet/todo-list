@@ -76,9 +76,8 @@
       }
     },
     methods: {
-      removeList: function (list_id) {
-        /* Send delete request for list to backend
-         */
+      //send delete request for list to backend
+      removeList(list_id) {
         this.store.deleteList(list_id)
       },
     }      

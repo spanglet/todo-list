@@ -15,14 +15,14 @@
         </div>
       </div>
       <label for="username">Username</label>
-      <input name="username" v-model="username" required>
-      <div class="input-warning" v-if="username.length < 4">
+      <input name="username" v-model="form.username" required>
+      <div class="input-warning" v-if="form.username.length < 4">
         Username must contain at least 4 characters
       </div>
 
       <label for="password">Password</label>
-      <input type="password" v-model="password" name="password" required>
-      <div class="input-warning" v-if="password.length < 8">
+      <input type="password" v-model="form.password" name="password" required>
+      <div class="input-warning" v-if="form.password.length < 8">
       	Password must contain at least 8 characters
       </div>
 
@@ -33,44 +33,34 @@
 </template>
 
 
-<script>
+<script setup>
 
-  export default {
-    data() {
-      return {
-        username: "",
-        password: '',
-        fname: "",
-        lname: ""
-      }
-    },
-    methods: {
-      // User info sent to Flask backend for authentication
-      register() {
-        
-        // User inputs validated to ensure correct registration request is sent
-        if (this.password.length < 8) {
-          alert("Password must contain at least 8 characters")
-          
-        } 
-        else if (this.username.length < 4) {
-          alert("Username must contain at least 4 characters")
-        } 
-        else {
-          this.axios.post("auth/register", {
-              "username": this.username,
-              "password": this.password
-            })
-            .then((res) => { 
-              // Render application if login is successful
-              if (res.status == 200) {
-                this.$router.push("/login")
-              }
-            })
-        }
-      }
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import Fetch from './fetch.js'
+
+  const router = useRouter()
+
+  const form = $ref({
+    username: "",
+    password: '',
+  })
+
+  //Send form to registration endpoint on backend
+  function register() {
+    if (form.password.length < 8 || form.username.length < 4) {
+      // show error message as ref
+      return
+    } 
+    const json = Fetch.post("auth/register", form)
+    if (json.data) {
+      router.push("/login")
+    }
+    else {
+      alert(json.error.message)
     }
   }
+
 
 </script>
 

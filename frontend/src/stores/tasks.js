@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { axios } from "../axios.js"
+import Fetch from "../fetch.js"
 import { useLists } from "./lists.js"
 
 export const useTasks = defineStore('tasks', {
@@ -43,30 +43,27 @@ export const useTasks = defineStore('tasks', {
   },
   actions: {
     async fetchTasks() {
-      try {
-        var resp = await axios.get("tasks/")
-        this.tasks = resp.data
-      }
-      catch (error) {
-        console.log(error)
+      var json = await Fetch.get("tasks/")
+      if (json.data) {
+        this.tasks = json.data
       }
     },
     async deleteTask(task_id) {
       // DELETE request to remove task from db
       var targetPath = "tasks/" + String(task_id)
-      var response = await axios.delete(targetPath)
+      var response = await Fetch.delete(targetPath)
       //this.fetchTasks()
     },
     async addTask(data) {
       
-      var response = await axios.post('tasks/', data)
-      this.tasks.push(data)
+      var json = await Fetch.post('tasks/', data)
+      if (json.data) {
+        this.tasks.push(json.data)
+      }
       //this.fetchTasks()
     },
     async completeTask(task_id) {
-      await axios.put("tasks/" + task_id, {
-         'completed': true
-      })
+      await Fetch.put("tasks/" + task_id, {'completed': true})
       this.fetchTasks() 
     },
     getTasksOnDate(date) {

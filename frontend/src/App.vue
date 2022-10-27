@@ -32,10 +32,6 @@
       return {
         tasks: [],
         drag: true,
-        notification: {
-          notify: false,
-          changedItem: ""
-        },
         lists: [],
       }
     },
@@ -67,12 +63,6 @@
 <template>
   <div class='app' @click='setFormVisibility(false)'>
     <AppHeader class='header' />
-    <div
-      class="notification header"
-      v-show="notification.notify"
-    >
-      The list _____ has been removed
-    </div>
     <Sidebar
       @notification='removeList'
       @lists-updated="loadLists"
@@ -136,12 +126,6 @@
     grid-area: footer;
     background: #b3b6b7;
     margin: 0;
-  }
-  .notification {
-    border-radius: 12px;
-    background: hsl(var(--hue-purple), 100%, var(--lgt-5));
-    height: 50px;
-    width: 120px;
   }
 </style>
 

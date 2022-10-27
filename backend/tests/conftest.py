@@ -30,10 +30,16 @@ class AuthActions(object):
     def __init__(self, client):
         self._client = client
 
-    def login(self, username='test', password='test'):
+    def login(self, username='test', password='test1234'):
         return self._client.post(
             '/auth/login',
-            data={'username': username, 'password': password}
+            json={'username': username, 'password': password}
+        )
+
+    def register(self, username='test', password='test1234'):
+        return self._client.post(
+            '/auth/register',
+            json={'username': username, 'password': password}
         )
 
     def logout(self):

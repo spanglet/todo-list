@@ -47,12 +47,12 @@
   })
 
   //Send form to registration endpoint on backend
-  function register() {
+  async function register() {
     if (form.password.length < 8 || form.username.length < 4) {
       // show error message as ref
       return
     } 
-    const json = Fetch.post("auth/register", form)
+    const json = await Fetch.post("auth/register", form)
     if (json.data) {
       router.push("/login")
     }

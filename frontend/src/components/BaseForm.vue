@@ -105,7 +105,7 @@
         dueDate: this.defaultDueDate,
         buttonIcon: ["check"],
         deadline: true,
-        priority: "",
+        priority: 1,
         fixedDate: this.fixedDueDate,
       }
     },
@@ -120,7 +120,7 @@
         this.store.addTask( {
             "name": this.name,
             "description": this.description,
-            "trueDueDate": this.dueDate,
+            "dueDate": this.dueDate,
             "priority": this.priority,
             "listID": this.store.currentListID
           })

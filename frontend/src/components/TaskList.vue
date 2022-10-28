@@ -2,14 +2,14 @@
 <template>
   
   <TransitionGroup name="task-list" class="list-group">
-    <div v-for="task in tasks" :key="task">
+    <div v-for="task in tasks" :key="task.id">
 
       <TaskTile class="list-group-item"
         :name="task.name"
         :description="task.description"
-        :dueDate="task.trueDueDate"
-        @remove-item='deleteTask(task)'
-        @task-completed='sendTaskCompletion(task)'
+        :dueDate="task.dueDate"
+        @remove-item='store.deleteTask(task)'
+        @task-completed='store.completeTask(task)'
       />
 
     </div>
@@ -38,19 +38,6 @@
       return {
         // ...
       }
-    },
-    methods: {
-
-      deleteTask(task) {
-        const i = this.store.tasks.indexOf(task)
-        this.store.tasks.splice(i, 1);
-        this.store.deleteTask(task.id)
-      },
-      sendTaskCompletion(task) {
-        const i = this.store.tasks.indexOf(task)
-        this.store.tasks[i].completed = true
-        this.store.completeTask(task.id)
-      },
     },
     computed: {
       tasks() {

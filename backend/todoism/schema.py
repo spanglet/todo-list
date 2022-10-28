@@ -31,9 +31,9 @@ class TaskSchema(Schema):
     """Schema for Task JSON post/put data validation"""
     name = fields.Str(required=True)
     description = fields.Str()
-    dueDate = fields.DateTime(required=True)
+    dueDate = fields.Date(required=True)
     listID = fields.Int(required=True)
-    priority = fields.Str()
+    priority = fields.Int()
     id = fields.Int(dump_only=True)
 
     @post_load

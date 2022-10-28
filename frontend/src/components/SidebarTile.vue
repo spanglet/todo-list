@@ -133,14 +133,14 @@
     align-items: center;
     height: 25px;
     font-size: 18pt;
-    border-radius: 2px;
+    border-radius: 3px;
     text-align: left;
     flex: 1;
     padding: 5px;
-    border-bottom: 1px solid #3c0e97;
+    border: 1px solid #3c0e97;
   }
   .footer-item {
-    border: 4px dashed black;
+    border: 4px solid black;
     background: green;
     border-radius: 12px;
   }

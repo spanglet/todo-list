@@ -22,7 +22,7 @@ async function doFetch(url, method, body) {
 
   var data = await fetch(req)
     .then((res) => res.json())
-    .catch((err) => alert(err))
+    .catch((err) => console.log(err))
 
   return data
 
@@ -42,6 +42,6 @@ export default {
     return doFetch(url, 'PUT', body)
   },
   delete(url) {
-    return Fetch(url, 'POST', body)
+    return doFetch(url, 'DELETE')
   }
 }

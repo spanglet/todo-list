@@ -1,5 +1,9 @@
 <template> 
-  <div class="tile" @click="isExpanded=!isExpanded" :class="{ 'expanded-tile': isExpanded, 'removed-tile': isRemoved}">
+  <div
+    class="tile"
+    @click="isExpanded=!isExpanded"
+    :class="{ 'expanded-tile': isExpanded, 'removed-tile': isRemoved}"
+  >
     <div class="col">
       {{name}}
     </div>  

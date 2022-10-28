@@ -42,32 +42,37 @@ export const useTasks = defineStore('tasks', {
     },
   },
   actions: {
+    // Retrieves all tasks owned by active user
     async fetchTasks() {
       var json = await Fetch.get("tasks/")
       if (json.data) {
         this.tasks = json.data
       }
     },
-    async deleteTask(task_id) {
-      // DELETE request to remove task from db
-      var targetPath = "tasks/" + String(task_id)
-      var response = await Fetch.delete(targetPath)
-      //this.fetchTasks()
+    // Send delete request and remove task from store
+    async deleteTask(task) {
+      var json = await Fetch.delete("tasks/" + String(task.id))
+      if (json.data) {
+        this.tasks.splice(this.tasks.indexOf(task), 1)
+      }
     },
+    // New task is posted to backend
     async addTask(data) {
-      
       var json = await Fetch.post('tasks/', data)
       if (json.data) {
         this.tasks.push(json.data)
       }
-      //this.fetchTasks()
     },
-    async completeTask(task_id) {
-      await Fetch.put("tasks/" + task_id, {'completed': true})
-      this.fetchTasks() 
+    // Marks task as completed after sending update
+    async completeTask(task) {
+      var json = await Fetch.put("tasks/" + task.id, {'completed': true})
+      if (json.data) {
+        task.completed = true
+      }
     },
+    // Filters tasks by date for calendar days
     getTasksOnDate(date) {
-      return this.tasks.filter((task) => task.trueDueDate === date)
+      return this.tasks.filter((task) => task.dueDate === date)
     },
   }
 })

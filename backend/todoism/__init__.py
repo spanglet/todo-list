@@ -28,7 +28,7 @@ def create_app(testing=False):
         db.init_app(app)
         if testing:
             db.drop_all()
-            db.create_all()
+        db.create_all()
 
     # Ensure the instance folder exists
     try:

@@ -28,7 +28,7 @@ def manage_tasks():
         db.session.add(new_task)
         db.session.commit()
   
-        return {"ok": True}, 201
+        return TaskSchema().dump(new_task), 201
 
     else:
         # GET requests for entire contents of tasks in db
@@ -61,7 +61,6 @@ def update_task(task_id):
 
         return { 
             "ok": True,
-            "message": "Task was successfully updated",
         }, 200
 
     elif request.method == 'DELETE':
@@ -71,7 +70,6 @@ def update_task(task_id):
 
         return { 
             "ok": True,
-            "message": "Task was successfully removed",
             "id": task_id,
         }, 200
 

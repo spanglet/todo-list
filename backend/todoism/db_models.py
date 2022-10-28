@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -14,8 +14,8 @@ class Task(db.Model):
     name = db.Column(db.String(255))
     description = db.Column(db.String(255))
     dueDate = db.Column(
-        db.DateTime,
-        default = datetime.utcnow
+        db.Date,
+        default = date.today()
     )
     priority = db.Column(
         db.Integer,

@@ -1,30 +1,30 @@
 <template> 
-  <div
-    class="tile"
-    @click="isExpanded=!isExpanded"
-    :class="{ 'expanded-tile': isExpanded, 'removed-tile': isRemoved}"
-  >
-    <div class="col">
-      {{name}}
+  <div class="task-tile" @click="isExpanded=!isExpanded" :class="{ 'expanded-tile': isExpanded, 'removed-tile': isRemoved}">
+    <div class="task-row">
+      <div class="task-name task-item">
+        {{name}}
+      </div>  
+      <div class="task-date task-item">
+        {{formattedDueDate}}
+      </div>
+      <div class="task-buttons task-item">
+        <SymbolButton
+            class="tile-button del-button"
+            @click="removeItem"
+            :icons="['xmark']"
+        />
+        <SymbolButton
+            class="tile-button done-button"
+            @click="markTaskCompleted"
+            :icons="['check']"
+        />
+      </div>  
     </div>  
-   <div class="col description-col">
-      <p class="tile-text"> {{description}} </p>
-    </div>  
-    <div class="col date-col">
-      {{formattedDueDate}}
-    </div>  
-    <div class="button-col">
-      <SymbolButton
-          class="tile-button del-button"
-          @click="removeItem"
-          :icons="['xmark']"
-      />
-      <SymbolButton
-          class="tile-button done-button"
-          @click="markTaskCompleted"
-          :icons="['check']"
-      />
-    </div>  
+    <Transition name="description">
+      <div v-show="isExpanded" class="task-description">
+        <p class="tile-text"> {{description}} </p>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -33,8 +33,8 @@
 
   import SymbolButton from "./SymbolButton.vue"
   
-  var days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat']
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  const days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat']
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
       "Jul","Aug", "Sep", "Oct", "Nov", "Dec"]
 
   export default { 
@@ -47,7 +47,7 @@
         isRemoved: false
       }
     },
-    emits: ['removeItem'],
+    emits: ['removeItem','taskCompleted'],
     props: {
       name: String,
       description: String,
@@ -71,73 +71,65 @@
             months[date.getMonth()] + " " +
             (date.getDate() + 1)
       },
-
     }
   }
-</script>
 
+</script>
 
 <style>
 
-  .tile {
+  .task-tile {
+    border-radius: 7px;
+    max-height: 55px;
+    transition: all .5s;
+    width: 100%;
+  }
+  .task-row {
     display: flex;
-    align-items: stretch;
-    justify-content: center;
-    margin: 0;
-    list-style: none;
-    border: 2px #b378cc outset;
+    font-size: 2em;
     border-radius: 7px;
     background: #bb8fce;
-    gap: 5px;
-    height: 3em;
-    transition: all .5s;
+    padding: .25em .5em;
+    border: 2px #b378cc solid;
+    position: relative;
+    z-index: 2;
   }
-  .expanded-tile {
-    height: 6em;
-  }
-  .expanded-tile .tile-text {
-    white-space: normal;
-  }
-  .removed-tile {
-    opacity: 0;
-  }
-  .col {
+  .task-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+  }
+  .task-name {
+    flex: 5;
+    justify-content: flex-start;
+  }
+  .task-date {
     flex: 2;
-    padding-left: .5em;
-    padding-right: .5em;
-    border-right: 1px black solid;
   }
-  .button-col {
-    display: flex;
-    justify-content: flex-end;
-    align-items: stretch;
+  .task-buttons {
     flex: 1;
   }
-  .tile-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .task-description {
+    padding: 10px 1em .25em 1em;
+    position: relative;
+    z-index: 1;
+    font-size: 1.2em;
+    top: -5px;
+    background: #acaaaa;
+    border: 2px #b266bb solid;
+    border-radius: 0 0 10px 10px;
   }
-  .description-col {
-    overflow: hidden;
+  .description-enter-active,
+  .description-leave-active {
+    transition: all .5s ease;
   }
-  .tile-button {
-    margin: 2px; 
-    width: 4em;
-    max-height: 65px;
+  .description-enter-from,
+  .description-leave-to {
+    transform: translateY(-42px);
   }
-  .del-button {
-    background: darksalmon;
-  }
-  .done-button {
-    background: lightgreen;
-  }
-  .date-col {
-    flex: 1;
+  .expanded-tile {
+    max-height: 100px;
+    
   }
 
 </style>

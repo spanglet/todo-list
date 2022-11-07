@@ -45,7 +45,7 @@ class List(db.Model):
         db.BINARY(16),
         db.ForeignKey('user.id')
     )
-    tasks = db.relationship('Task')
+    tasks = db.relationship('Task', cascade="delete")
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)

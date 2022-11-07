@@ -1,78 +1,45 @@
-<script>
-
-  import AppHeader from './components/AppHeader.vue'
-  import Sidebar from './components/Sidebar.vue'
-  import Footer from './components/Footer.vue'
-  import { computed } from 'vue'
-
-  import { useTasks } from './stores/tasks.js'
-  import { useLists } from './stores/lists.js'
-
-  export default { 
-
-    setup() {
-      const store = useTasks()
-      const listStore = useLists()
-      return {
-        store,
-        listStore,
-      }
-    },
-    components: {
-      AppHeader,
-      Sidebar,
-      Footer,
-    },
-    provide() {
-      return {
-        currentLists: computed(() => this.listStore.lists),
-      }
-    },
-    data() {
-      return {
-        tasks: [],
-        drag: true,
-        lists: [],
-      }
-    },
-    beforeMount() {
-      this.loadLists()
-      this.loadTasks()
-    },
-    mounted() {
-      this.$router.push("/app/todo/" + this.store.currentListID)
-    },
-    methods: {
-
-      loadLists() {
-        this.listStore.fetchLists()
-      },
-      loadTasks() {
-        this.store.fetchTasks()
-      },
-      removeList(list_id) {
-        this.listStore.deleteList(list_id)
-      },
-      setFormVisibility(visible) {
-        this.store.taskFormActive = visible
-      },
-    }
-  }
-</script>
-
 <template>
+
   <div class='app' @click='setFormVisibility(false)'>
     <AppHeader class='header' />
     <Sidebar
-      @notification='removeList'
-      @lists-updated="loadLists"
       class='sidebar'
     />
     <router-view class="app-main"></router-view>
     <Footer class="footer-area" />
     <div class="edge"></div>
   </div>
+
 </template>
+
+<script setup>
+
+  import { computed, onMounted, onBeforeMount, ref, provide } from 'vue'
+  import { useRouter } from 'vue-router'
+
+  import AppHeader from './components/AppHeader.vue'
+  import Sidebar from './components/Sidebar.vue'
+  import Footer from './components/Footer.vue'
+  import { useTasks } from './stores/tasks.js'
+  import { useLists } from './stores/lists.js'
+
+  const store = useTasks()
+  const listStore = useLists()
+  const router = useRouter()
+
+  onBeforeMount(() => {
+    listStore.fetchLists()
+    store.fetchTasks()
+  })
+  onMounted(() => {
+    router.push("/app/todo/" + store.currentListID)
+  })
+
+  function setFormVisibility(visible) {
+    store.taskFormActive = visible
+  }
+
+</script>
 
 <style>
 
@@ -92,8 +59,8 @@
       minmax(300px, 3fr)
       minmax(20px, 2fr);
     grid-template-rows:
-      minmax(80px, 1fr)
-      minmax(450px, 13fr)
+      minmax(70px, 1fr)
+      minmax(600px, 13fr)
       minmax(80px, 1fr);
     grid-template-areas:
       "header header header header"
@@ -101,7 +68,7 @@
       "footer footer footer footer";
     height: 100vh;
     width: 100vw;
-    font-family: Helvetica, sans-serif;
+    font-family: Verdana, sans-serif;
   } 
   .app-main {
     grid-area: app-main / app-main / app-main / app-main-right;
@@ -113,9 +80,9 @@
     grid-area: header;
   }
   .sidebar {
-    margin: 0;
     grid-area: sidebar;
     position: relative;
+    background: hsl(var(--hue-purple),100%,var(--lgt-3));
     box-shadow: 4px 0px 8px -7px black;
   }
   .edge {

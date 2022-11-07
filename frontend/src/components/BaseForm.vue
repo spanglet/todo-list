@@ -126,9 +126,14 @@
           })
         this.$emit('submitted', true)
         this.$emit('closed')
+
+        this.closeForm()
       },
       closeForm() {
         this.store.taskFormActive = false
+        this.name = ""
+        this.description = ""
+        this.dueDate =  this.defaultDueDate
       }
     }
   }      

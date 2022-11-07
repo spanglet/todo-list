@@ -1,12 +1,13 @@
 
 <template>
   <div class="list-form" @click="showForm = true">
-    <div class="list-form-header" v-if="!showForm">
-      <div>
-        New List
-      </div>
-      <font-awesome-icon class="icon" icon="plus" />
-    </div>
+    <SymbolButton
+      :icons="plusIcon"
+      v-if="!showForm"
+      class="list-form-header"
+    >
+      New List
+    </SymbolButton>
     <div class="list-form-body" v-else>
     <!-- <label for="list-name"> List Name </label> -->
       <input
@@ -17,12 +18,10 @@
       <SymbolButton
         :icons="submitIcon"
         @click.stop="createList"
-        class='form-submit-button'
       />
       <SymbolButton
         :icons="cancelIcon"
         @click.stop="hideForm"
-        class='form-cancel-button'
       />
     </div>
   </div>
@@ -35,37 +34,22 @@
   import SymbolButton from "./SymbolButton.vue"
   import { useLists } from '../stores/lists.js'
 
-  export default {
-    setup() {
-      const store = useLists()
-      return {
-        store,
-      }
-    },
-    components: {
-      SymbolButton,
-    },
-    emits: [
-      'notification'
-    ],
-    data() {
-      return {
-        submitIcon: ["check"],
-        cancelIcon: ["xmark"],
-        showForm: false,
-        name: "",
-      }
-    },
-    methods: {
-      hideForm: function () {
-        this.showForm = false
-      },
-      // Creates a new list for user
-      createList: function() {
-        this.store.addList(this.name)
-        this.hideForm()
-      },
-    },
+  const store = useLists()
+
+  var submitIcon = ["check"]
+  var cancelIcon = ["xmark"]
+  var plusIcon =  ["plus"]
+  var showForm =  false
+  var name =  ""
+
+  function hideForm() {
+    this.showForm = false
+    this.name = ""
+  }
+  // Creates a new list for user
+  function createList() {
+    this.store.addList(this.name)
+    this.hideForm()
   }
 
 </script>
@@ -76,7 +60,6 @@
     flex-flow: column nowrap;
     justify-content: center;
     align-items: stretch;
-    gap: .5em;
     width: 100%;
   }
   .list-form-header {
@@ -91,11 +74,5 @@
   .list-form-body {
     display: flex;
     gap: 2px;
-  }
-  .form-submit-button {
-    flex: 1;
-  }
-  .form-cancel-button {
-    flex: 1;
   }
 </style>

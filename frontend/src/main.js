@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 	
 import { router } from './router.js'
 import { axios } from "./axios.js"
@@ -17,6 +17,11 @@ library.add(faPlus,faMinus,faCheck,faXmark,
 	faAngleDown,faAngleUp)
 
 const pinia = createPinia()
+// router added globally to Pinia stores
+pinia.use(({ store }) => {
+  store.router = markRaw(router)
+})
+
 const app = createApp(Wrapper)
 	.component("font-awesome-icon", FontAwesomeIcon) 
 	.use(router)

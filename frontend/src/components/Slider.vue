@@ -27,7 +27,6 @@
 
 <script>
 
-  import BaseForm from "./BaseForm.vue"
   import { useTasks } from '../stores/tasks.js'
 
   export default {

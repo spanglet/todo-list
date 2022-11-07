@@ -1,42 +1,42 @@
 <template>
+
   <button class="button" :class="btnType" >
     <slot></slot>
     <font-awesome-icon class="icon" :icon="btnType" />
   </button>
+
 </template>
 
-<script>
-  export default { 
-    data() {
-      return {
-      }
-    },
-    props: {
+<script setup>
+
+  const props = defineProps({
       btnType: String
-    }
-  }
+  })
+
 </script>
 
 <style>
 
   .button {
     display: flex;
-    border-radius: 10px;
     align-items: center;
     justify-content: center;
-    border: 1px black solid;
+    padding: .1em;
     font-weight: bold;
     font-size: 1em;
-    padding: 2px;
-  }
-  .icon {
-
+    box-shadow: 0 2px 2px 0;
+    border-radius: 8px;
+    border: 1px black solid;
   }
   .button:hover {
-    filter: brightness(.92);
+    filter: brightness(.90);
   }
   .button:active {
-    filter: brightness(.75);
+    filter: brightness(.74);
+  }
+  .icon {
+    height: 1.25em;
+    width: 1.25em;
   }
 
 </style>

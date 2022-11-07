@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* HSL hue options */
+    --hue-purple: 260;
+    --hue-green: 130;
+    --hue-blue: 210;
+ 
+    /* HSL lighting options */
+    --lgt-1: 15%;
+    --lgt-2: 30%;
+    --lgt-3: 45%;
+    --lgt-4: 60%;
+    --lgt-5: 75%;
+    --lgt-6: 90%;
+    --lgt-7: 100%;  
+  }
+}
+   

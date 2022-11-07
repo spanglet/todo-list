@@ -16,37 +16,17 @@
 
 </template>
 
-<script>
+<script setup>
 
   import SymbolButton from "./SymbolButton.vue"
   import { useTasks } from "../stores/tasks.js"
 
-  export default { 
+  const store = useTasks()
+  
+  const buttonIcons =  ["plus", "minus"]
 
-    setup() {
-      const store = useTasks()
-      return {
-        store,
-      }
-    },
-    components: {
-      SymbolButton,
-    },
-    data() {
-      return {
-        name: "",
-        description: "",
-        tasks: {},
-        buttonIcons: ["plus", "minus"],
-      }
-    },
-    methods: { 
-      // triggered on successful form submission
-      // emits event up to main container for list refresh
-      changeFormVisibility() {
-        this.store.taskFormActive = !this.store.taskFormActive
-      }
-    },
+  function changeFormVisibility() {
+    store.taskFormActive = !store.taskFormActive
   }
 
 </script>
@@ -55,17 +35,16 @@
 
   .list-header {
     display: flex;
-    list-style: none;
-    justify-content:center;
+    justify-content: center;
     align-items: stretch;
-    color: white;
-    font-size: 20px;
+    color: #fdfdfd;
+    font-size: 1.75em;
     margin: .4em;
     border-radius: 8px;
     border: 1px solid black;
     background: hsl(var(--hue-purple), 100%, var(--lgt-4 ));
     box-shadow: 0 4px 8px -7px black;
-    height: 2.5em;
+    padding: .25em;
   }
   .col-header {
     display: flex;
@@ -84,6 +63,9 @@
   .list-header-button {
     display: flex;
     justify-content: space-between;
+    gap: .5em;
+    font-size: .8em;
+    padding: .4em;
   }
   .date-col {
     flex: 1;

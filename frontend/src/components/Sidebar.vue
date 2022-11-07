@@ -4,9 +4,9 @@
 
     <SidebarTile
       name="Lists"
-      @clicked="removeList"
+      @clicked="store.deleteList"
       path='todo/'
-      :routes="currentLists"
+      :routes="store.lists"
       footer
       tile-button
     >
@@ -37,51 +37,24 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
   import SidebarTile from "./SidebarTile.vue"
   import ListForm from "./ListForm.vue"
   import SymbolButton from "./SymbolButton.vue"
   import { useLists } from '../stores/lists.js'
 
-  export default {
-    setup() {
-      const store = useLists()
-      return {
-        store,
-      }
+  const store = useLists()
+
+  const calendarRoutes = [
+    { name: "Month",
+      id: "month"
     },
-    components: {
-      ListForm,
-      SidebarTile,
-      SymbolButton,
+    { name: "Week",
+      id: "week"
     },
-    inject: ['currentLists'],
-    emits: [
-      'listChanged',
-      'listsUpdated',
-      'notification',
-    ],
-    data() {
-      return {
-        calendarRoutes: [
-          { name: "Month",
-            id: "month"
-          },
-          { name: "Week",
-            id: "week"
-          },
-        ],
-        icons: ["xmark"]
-      }
-    },
-    methods: {
-      //send delete request for list to backend
-      removeList(list_id) {
-        this.store.deleteList(list_id)
-      },
-    }      
-  }
+  ]
+  const icons = ["xmark"]
 
 </script>
 
@@ -89,11 +62,9 @@
 
   .sidebar {
     display: flex;
-    background: hsl(var(--hue-purple),100%,var(--lgt-3));
     color: white;
     flex-flow: column nowrap;
     align-items: stretch;
-    margin: 8px;
     gap: 3px;
   }
 

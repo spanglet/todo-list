@@ -27,7 +27,7 @@ def lists():
         db.session.add(new_list)
         db.session.commit()
        
-        return {"ok": True, "id": new_list.id}, 201
+        return list_schema.dump(new_list), 201
  
     else:
         
@@ -38,7 +38,7 @@ def lists():
  
 @bp.route('/<int:list_id>', methods=['PUT','DELETE','GET'])
 @login_required
-def update_list(list_id):
+def modify_list(list_id):
     """Delete or modify existing list owned by requester"""
     list_ = db.get_or_404(List, list_id)
 
@@ -61,7 +61,10 @@ def update_list(list_id):
         db.session.delete(list_)
         db.session.commit()
 
-        return {'ok': True}, 200
+        return { 
+            "ok": True,
+            "id": list_id,
+        }, 200
 
     else:
         #TODO change response to list, with tasks of list (MARSHMALLOW)

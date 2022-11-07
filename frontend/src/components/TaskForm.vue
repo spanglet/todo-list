@@ -7,26 +7,12 @@
 
 </template>
 
-<script>
+<script setup>
 
   import BaseForm from "./BaseForm.vue"
   import { useTasks } from '../stores/tasks.js'
 
-  export default {
-    setup() {
-      const store = useTasks()
-      return {
-        store,
-      }
-    },
-    components: {
-      BaseForm,
-    },
-    data() {
-      return {
-      } 
-    }
-  }
+  const store = useTasks()
 
 </script>
 

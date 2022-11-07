@@ -2,12 +2,14 @@
 
   <div class="app-header">
     <div class="header-item invisible" />
-    <div class="header-item header-title"> To-Do List </div>
-      <BaseDropdown 
-        header-text="My Account"
+    <div class="header-item header-title">
+      Todoism
+    </div>
+    <BaseDropdown 
+      header-text="My Account"
         :links="links"
         class="header-item header-menu"
-      />
+    />
   </div>
 
 </template>
@@ -71,7 +73,8 @@
   .header-title {
     display: flex;
     justify-content: center;
-    font-size: 30px;
+    font-size: 2em;
+    
   }
   .header-menu {
     display: flex;

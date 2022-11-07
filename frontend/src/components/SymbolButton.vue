@@ -1,7 +1,7 @@
 <template>
   
   <Transition tag="div">
-    <BaseButton :class="currentClass" @click="onClick" :btnType="currentIcon">
+    <BaseButton :class="currentClass" @click.stop="onClick" :btnType="currentIcon">
       <slot />
     </BaseButton>
   </Transition>
@@ -17,7 +17,7 @@
       BaseButton,
     },
     props: {
-      // { 'plus' | 'minus' }
+      // { 'plus' | 'minus' | 'xmark' | 'check'}
       icons: Array,
     },
     data() {
@@ -52,23 +52,18 @@
 
 <style>
   [class$="-button"] {
-    box-shadow: 0 2px 2px 0;
   }
   .plus-button {
     background-color: lightgreen;
-    border-radius: 8px;
   }
   .minus-button {
     background-color: limegreen;
-    border-radius: 8px;
   }
   .xmark-button {
     background-color: red;
-    border-radius: 5px;
   }
   .check-button {
     background-color: green;
-    border-radius: 5px;
   }
   .v-enter-active,
   .v-leave-active {

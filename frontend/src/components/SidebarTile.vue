@@ -1,18 +1,16 @@
 
 <template>
 
-  <div class="sidebar-tile">
+  <div class="sidebar-item">
 
-    <div class="sidebar-tile-header sidebar-tile-item" @click="expand">
+    <div class="sidebar-group-header" @click="expand">
       {{ name }}
-      <font-awesome-icon :icon="dropdownIcon" v-if="routes"/> 
     </div>
 
-    <TransitionGroup>
-      <div class="sidebar-expanded-group" v-if="expanded && routes">
+      <div class="sidebar-group">
 
         <div 
-          class="sidebar-expanded-item sidebar-tile-item"
+          class="sidebar-tile"
           v-for="route in routes"
           :key="route.id"
           :class="{ 'active-route': isActiveRoute(route.id) }"
@@ -21,20 +19,19 @@
           <div>
             {{ route.name }}
           </div>
-          <div
-            v-if='hasButton'
-            @click.stop='onClick(route.id)'
-          >
-            <slot name='sidebar-tile-button' />
+
+          <div @click.stop='onClick(route)'>
+
+            <slot name='sidebar-tile-button'/>
+
           </div>
         </div>
         
-        <div v-if="hasFooter" class="sidebar-expanded-item footer-item">
+        <div v-if="hasFooter" class="sidebar-tile footer-item">
           <slot name='sidebar-tile-footer' /> 
         </div>
 
       </div>
-    </TransitionGroup>
 
   </div>
 
@@ -73,9 +70,6 @@
       }
     },
     computed: {
-      dropdownIcon() {
-        return this.expanded ? 'angle-up' : 'angle-down'
-      },
       basePath() {
         return '/app/' + this.path
       },
@@ -96,8 +90,8 @@
       isActiveRoute(id) {
         return this.$route.path === (this.basePath + id)
       },
-      onClick(id) {
-        this.$emit('clicked',id)
+      onClick(route) {
+        this.$emit('clicked', route)
       },
     }
   }
@@ -107,13 +101,13 @@
 
 <style>
 
-  .sidebar-tile {
+  .sidebar-item {
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
     gap: 10px;
   }
-  .sidebar-tile-header {
+  .sidebar-group-header {
     display: flex;
     font-size: 1.75em;
     justify-content: space-between;
@@ -122,45 +116,35 @@
     box-shadow: 0px 3px 5px 1px black;
     padding: 5px;
   }
-  .sidebar-expanded-group {
+  .sidebar-group {
     display: flex;
     flex-flow: column nowrap;
-    gap: 1px;
+    gap: 3px;
+    margin: 5px;
   }
-  .sidebar-expanded-item {
+  .sidebar-tile {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 25px;
     font-size: 18pt;
-    border-radius: 3px;
     text-align: left;
     flex: 1;
     padding: 5px;
-    border: 1px solid #3c0e97;
+    border: 3px solid #1a1a1a;
+    border-radius: 10px;
+    background: hsl(var(--hue-purple),100%,var(--lgt-4))
   }
   .footer-item {
-    border: 4px solid black;
-    background: green;
+    border: 2px solid black;
     border-radius: 12px;
-  }
-  .v-enter-active,
-  .v-leave-active {
-    transition: all .5s ease;
-  }
-  .v-leave-to,
-  .v-enter-from {
-    opacity: 0;
+    background: green;
   }
   .active-route {
-    background-color: hsl(var(--hue-purple),100%,var(--lgt-2));
+    border: 5px solid black;
+    background: hsl(var(--hue-purple),70%,var(--lgt-4));
   }
-  .sidebar-tile-item:hover {
-    background: hsl(var(--hue-purple),100%,var(--lgt-2));
-  }
-  .sidebar-tile-item {
-    display: flex;
-    justify-content: space-between; 
+  .sidebar-tile:hover, .sidebar-tile-header:hover {
+    filter: brightness(.92);
   }
 
 </style>
